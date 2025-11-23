@@ -75,7 +75,6 @@ namespace Bloggie.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
             migrationBuilder.CreateIndex(
                 name: "IX_BlogPostTag_TagsId",
                 schema: "dbo",

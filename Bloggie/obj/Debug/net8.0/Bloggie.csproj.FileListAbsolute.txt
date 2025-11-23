@@ -145,3 +145,4 @@ E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\refint\Bloggie.dll
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.pdb
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.genruntimeconfig.cache
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\ref\Bloggie.dll
+E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.sourcelink.json

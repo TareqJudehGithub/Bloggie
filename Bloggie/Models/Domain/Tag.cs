@@ -8,7 +8,7 @@ namespace Bloggie.Models.Domain
         #region Properties
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string DisplyName { get; set; }
+        public string DisplayName { get; set; }
         #endregion
 
         public ICollection<BlogPost> BlogPosts { get; set; }
