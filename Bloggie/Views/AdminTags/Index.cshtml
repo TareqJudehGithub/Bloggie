@@ -15,6 +15,7 @@
                             <th>Id</th>
                             <th>Name</th>
                         <th>Display Name</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -24,6 +25,20 @@
                             <td>@tag.Id</td>
                             <td>@tag.Name</td>
                             <td>@tag.DisplayName</td>
+                            <td>
+                                <a 
+                                        class="btn btn-warning" 
+                                        asp-controller="adminTags"
+                                        asp-action="Edit"
+                                        asp-route-id="@tag.Id"
+                                   >Edit
+                                </a>
+                                <a class="btn btn-danger"
+                                        asp-controller="adminTags"
+                                        asp-action="Delete"
+                                        asp-route-id="@tag.Id"
+                                   >Delete</a>
+                            </td>
                         </tr>
                 }
                     </tbody>
