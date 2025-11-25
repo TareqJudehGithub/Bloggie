@@ -3,6 +3,8 @@
 using Bloggie.Data;
 using Bloggie.Models.Domain;
 using Bloggie.Models.ViewModel;
+using Bloggie.Repositories;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,13 +13,13 @@ namespace Bloggie.Controllers
     public class AdminTagsController : Controller
     {
         #region Fields
-        private readonly BloggieDbContext _dbContext;
+        private readonly ITagRepository _tagRepository;
         #endregion
 
         #region Constructor
-        public AdminTagsController(BloggieDbContext dbContext)
+        public AdminTagsController(ITagRepository tagRepository)
         {
-            _dbContext = dbContext;
+            _tagRepository = tagRepository;
         }
         #endregion
 
@@ -25,9 +27,9 @@ namespace Bloggie.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var model = await _dbContext.Tags.ToListAsync();
+            var viewModel = await _tagRepository.GetAll();
 
-            return View(model);
+            return View(viewModel);
         }
 
         [HttpGet]
@@ -38,33 +40,23 @@ namespace Bloggie.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddTagRequestVM addTagRequest)
         {
-            // 1. 'manual way' of model binding Model data, mapping AddTagRequestVM to Tag domain model       
-            var model = new Tag
-            {
-                Name = addTagRequest.Name,
-                DisplayName = addTagRequest.DisplayName
-            };
-
-            // Saving to the database
-            await _dbContext.Tags.AddAsync(model);
-            await _dbContext.SaveChangesAsync();
-
+            await _tagRepository.Add(addTagRequest);
             return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]
-        public async Task<IActionResult> Edit(Guid Id)
+        public async Task<IActionResult> Edit(Guid id)
         {
-            var tag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == Id);
+            var viewModel = await _tagRepository.Get(id);
 
             // Convert to View Model - EditTagRequest
-            if (ModelState.IsValid)
+            if (viewModel != null)
             {
                 var viewData = new EditTagRequestVM
                 {
-                    Id = tag.Id,
-                    Name = tag.Name,
-                    DisplayName = tag.DisplayName
+                    Id = viewModel.Id,
+                    Name = viewModel.Name,
+                    DisplayName = viewModel.DisplayName
                 };
 
                 return View(viewData);
@@ -72,41 +64,24 @@ namespace Bloggie.Controllers
             return View(null);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(Guid Id, EditTagRequestVM editTagRequest)
+        public async Task<IActionResult> Edit(EditTagRequestVM editTagRequest)
         {
-            // Convert back to Tag model
-            if (Id == editTagRequest.Id)
-            {
-                var tag = new Tag
-                {
-                    Id = editTagRequest.Id,
-                    Name = editTagRequest.Name,
-                    DisplayName = editTagRequest.DisplayName
-                };
-
-                _dbContext.Update(tag);
-                await _dbContext.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            // Return to Edit screen in case Id was not found
-            return RedirectToAction(nameof(Edit));
+            await _tagRepository.Edit(editTagRequest);
+            return RedirectToAction(nameof(Index));
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> Delete(Guid Id)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var tag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == Id);
-            return View(tag);
+            var viewModel = await _tagRepository.Get(id);
+
+            return View(viewModel);
         }
         [HttpPost]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid Id)
         {
-            var tag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == Id);
-            _dbContext.Tags.Remove(tag);
-            await _dbContext.SaveChangesAsync();
-
+            await _tagRepository.Delete(Id);
             return RedirectToAction(nameof(Index));
         }
     }

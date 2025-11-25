@@ -1,6 +1,6 @@
 ﻿namespace Bloggie.Models.ViewModel
 {
-    public class ViewTagsRequestVM
+    public class ReadOnlyRequestVM
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

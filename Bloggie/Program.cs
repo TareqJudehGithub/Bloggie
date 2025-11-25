@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Bloggie.Data;
+using Bloggie.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,9 @@ var connectionString = builder.Configuration.GetConnectionString("MSSQLSRV");
 builder.Services.AddDbContext<BloggieDbContext>(options =>
 options.UseSqlServer(connectionString)
 );
+
+// Injecting ITagInterface 
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 var app = builder.Build();
 
