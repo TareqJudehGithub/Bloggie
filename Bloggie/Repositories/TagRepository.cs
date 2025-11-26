@@ -20,12 +20,12 @@ namespace Bloggie.Repositories
         #endregion
 
         #region methods  
-        public async Task<IEnumerable<ReadOnlyRequestVM>> GetAll()
+        public async Task<IEnumerable<ReadOnlyTagRequestVM>> GetAll()
         {
             var data = await _dbContext.Tags.ToListAsync();
 
             // Convert to View Model data
-            var viewData = data.Select(q => new ReadOnlyRequestVM
+            var viewData = data.Select(q => new ReadOnlyTagRequestVM
             {
                 Id = q.Id,
                 Name = q.Name,
@@ -33,11 +33,11 @@ namespace Bloggie.Repositories
             });
             return viewData;
         }
-        public async Task<ReadOnlyRequestVM> Get(Guid id)
+        public async Task<ReadOnlyTagRequestVM> Get(Guid id)
         {
             var tag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == id);
             // Convert/map Model to View Model
-            var viewData = new ReadOnlyRequestVM
+            var viewData = new ReadOnlyTagRequestVM
             {
                 Id = tag.Id,
                 Name = tag.Name,
