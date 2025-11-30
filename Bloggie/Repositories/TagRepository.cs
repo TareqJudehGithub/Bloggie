@@ -51,7 +51,7 @@ namespace Bloggie.Repositories
             // 1. 'manual way' of model binding Model data, mapping AddTagRequestVM to Tag domain model       
             var model = new Tag
             {
-                Id = viewModel.Id,
+                //  Id = viewModel.Id,
                 Name = viewModel.Name,
                 DisplayName = viewModel.DisplayName
             };

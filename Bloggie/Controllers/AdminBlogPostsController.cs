@@ -1,26 +1,57 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 using Bloggie.Models.ViewModel;
 using AspNetCoreGeneratedDocument;
+using Bloggie.Repositories;
 
 namespace Bloggie.Controllers
 {
     public class AdminBlogPostsController : Controller
     {
-        public IActionResult Index(ReadOnlyBlogPostRequestVM viewModel)
-        {
+        #region Fields
+        private readonly ITagRepository _tagRepository;
+        #endregion
 
-            return View();
+        #region Constructor
+        public AdminBlogPostsController(ITagRepository tagRepository)
+        {
+            _tagRepository = tagRepository;
         }
+        #endregion
+
+        #region Methods
+        // Get all tags
+        public async Task<IActionResult> Index()
+        {
+            var posts = await _tagRepository.GetAll();
+            return View(posts);
+        }
+
+        // Add -with select tag dropdown menu
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
-            return View();
+            var tags = await _tagRepository.GetAll();
+
+            var viewModel = new AddBlogPostRequestVM
+            {
+                Tags = tags.Select(q =>
+                new SelectListItem
+                {
+                    Text = q.DisplayName,
+                    Value = q.Id.ToString()
+                })
+            };
+
+            return View(viewModel);
         }
+
         [HttpPost]
-        public IActionResult Add(AddBlogPostRequestVM viewModel)
+        public async Task<IActionResult> Add(AddBlogPostRequestVM addVM)
         {
-            return View();
+            return RedirectToAction(nameof(Index));
         }
+        #endregion
     }
 }
