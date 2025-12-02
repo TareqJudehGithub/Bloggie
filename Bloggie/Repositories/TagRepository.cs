@@ -33,8 +33,9 @@ namespace Bloggie.Repositories
             });
             return viewData;
         }
-        public async Task<ReadOnlyTagRequestVM> Get(Guid id)
+        public async Task<Tag> Get(Guid id)
         {
+
             var tag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == id);
             // Convert/map Model to View Model
             var viewData = new ReadOnlyTagRequestVM
@@ -44,7 +45,7 @@ namespace Bloggie.Repositories
                 DisplayName = tag.DisplayName
             };
 
-            return viewData;
+            return tag;
         }
         public async Task<Tag> Add(AddTagRequestVM viewModel)
         {

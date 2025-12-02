@@ -58,29 +58,40 @@
             </label>
         </div>
 
-        @*Tag selection - Drop-down List*@
-        <div class="mb-3" ">
-            <label class="form-label"  asp-for="@Model.Tags">Tags - Drop-down menu</label>
+        @*Tag selection - Drop-down List - Single item*@
+        @*<div class="mb-3" ">
+            <label class="form-label" asp-for="SelectedTag">Tags - Drop-down menu - Single Item</label>
             <select class="form-select"
                     asp-items="@Model.Tags"
-                    asp-for="@Model.SelectedTag">
+                    asp-for="SelectedTag">
                 <option selected disabled>Select a Tag</option>
             </select>
-        </div>
+        </div>*@
 
+
+        @*Tag selection - Drop-down List - Multiple items*@
+        @*<div class="mb-3" ">
+            <label class="form-label" asp-for="SelectedTags">Tags - Drop-down menu - Multiple Items</label>
+            <select class="form-select"
+                    asp-items="@Model.Tags"
+                    asp-for="SelectedTags">
+                <option selected disabled>Select a Tag</option>
+            </select>
+        </div>*@
+
+        @*Tag selection - Checkbox*@
         <div class="mb-3">
-            <label class="form-label" asp-for="@Model.SelectedTags">Tags - Checkbox</label>
-            @*Tag selection - Checkbox*@
+            <label class="form-label" asp-for="SelectedTags">Tags - Checkbox</label>
             @foreach (var item in Model.Tags)
             {
                 <div class="form-check mb-3">
                     <input class="form-check-input"
                            type="checkbox"
-                           name="@Model.SelectedTags"
+                           name="SelectedTags"
                            value="@item.Value"
                            @(Model.SelectedTags.Contains(item.Value) ? "checked" : "") />
                     <label class="form-check-abel mb-0 ms-1"
-                           asp-for="@Model.SelectedTags">
+                           asp-for="SelectedTags">
                         @item.Text
                     </label>
                 </div>
