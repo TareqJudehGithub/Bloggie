@@ -1,0 +1,53 @@
+﻿@model IEnumerable<ReadOnlyBlogPostRequestVM>
+
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Blog Posts List - Admin Functionality</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Heading)</th>
+                <th>@Html.DisplayNameFor(model => model.Tags)</th>
+                @*<th>@Html.DisplayNameFor(model => model.PageTitle)</th>
+                <th>@Html.DisplayNameFor(model => model.Content)</th>
+                <th>@Html.DisplayNameFor(model => model.ShortDescription)</th>
+                <th>@Html.DisplayNameFor(model => model.FeaturedImgUrl)</th>
+                <th>@Html.DisplayNameFor(model => model.UrlHandle)</th>
+                <th>@Html.DisplayNameFor(model => model.PublishedDate)</th>
+                <th>@Html.DisplayNameFor(model => model.Author)</th>
+                <th>@Html.DisplayNameFor(model => model.isVisible)</th>*@         
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Heading)</td>
+                    <td>
+                        <div class="d-flex">
+                            @foreach (var tag in item.Tags)
+                            {
+                                <p class="btn btn-secondary me-1">
+                                @Html.DisplayFor(modelItem => tag.DisplayName)
+                                </p>                              
+                            }
+                        </div>
+                    </td>
+                    @*<td>@Html.DisplayFor(modelItem => item.PageTitle)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Content)</td>
+                    <td>@Html.DisplayFor(modelItem => item.ShortDescription)</td>
+                    <td>@Html.DisplayFor(modelItem => item.FeaturedImgUrl)</td>
+                    <td>@Html.DisplayFor(modelItem => item.UrlHandle)</td>
+                    <td>@Html.DisplayFor(modelItem => item.PublishedDate)</td>
+                    <td>@Html.DisplayFor(modlItem => item.Author)</td>
+                    <td>@Html.DisplayFor(modelItem => item.isVisible)</td>*@
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

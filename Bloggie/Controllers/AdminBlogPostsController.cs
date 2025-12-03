@@ -31,15 +31,32 @@ namespace Bloggie.Controllers
         public async Task<IActionResult> Index()
         {
             var model = await _blogPostRepository.GetAll();
-            return View(model);
+            var viewData = model.Select(q => new ReadOnlyBlogPostRequestVM
+            {
+                Heading = q.Heading,
+                PageTitle = q.PageTitle,
+                Content = q.Content,
+                ShortDescription = q.ShortDescription,
+                FeaturedImgUrl = q.FeaturedImgUrl,
+                UrlHandle = q.UrlHandle,
+                PublishedDate = q.PublishedDate,
+                Author = q.Author,
+                isVisible = q.isVisible,
+                Tags = q.Tags
+            });
+
+
+            return View(viewData);
         }
 
-        // Add -with select tag drop-down menu
+
+
         [HttpGet]
         public async Task<IActionResult> Add()
         {
             var tags = await _tagRepository.GetAll();
 
+            // Add -with select tag drop-down menu
             var viewModel = new AddBlogPostRequestVM
             {
                 Tags = tags.Select(q =>
@@ -104,7 +121,7 @@ namespace Bloggie.Controllers
 
             await _blogPostRepository.Add(blogPost: model);
 
-            return RedirectToAction(actionName: nameof(Add));
+            return RedirectToAction(actionName: nameof(Index));
         }
         #endregion
     }

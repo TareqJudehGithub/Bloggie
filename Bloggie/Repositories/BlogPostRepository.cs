@@ -20,9 +20,14 @@ namespace Bloggie.Repositories
         #region Methods
         public async Task<IEnumerable<BlogPost>> GetAll()
         {
-            var model = await _bloggieDbContext.BlogPosts.ToListAsync();
+            // Using .Include() here to bring from the database a related property (navigation property)
+            // from the BlogPost Domain Model
+            var model = await _bloggieDbContext.BlogPosts
+                .Include(q => q.Tags)
+                .ToListAsync();
             return model;
         }
+
         public async Task<BlogPost> Get(Guid id)
         {
             var blogPost = await _bloggieDbContext.BlogPosts.FirstOrDefaultAsync(q => q.Id == id);

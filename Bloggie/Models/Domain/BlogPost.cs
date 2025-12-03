@@ -16,6 +16,7 @@ namespace Bloggie.Models.Domain
         public string Author { get; set; }
         public bool isVisible { get; set; }
 
+        // Navigation property - which tells EF Core that this is a related property.
         public ICollection<Tag> Tags { get; set; }
     }
 }
