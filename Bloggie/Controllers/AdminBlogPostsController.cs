@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 using Bloggie.Models.ViewModel;
-using AspNetCoreGeneratedDocument;
 using Bloggie.Repositories;
 using Bloggie.Models.Domain;
 
@@ -31,8 +30,10 @@ namespace Bloggie.Controllers
         public async Task<IActionResult> Index()
         {
             var model = await _blogPostRepository.GetAll();
+
             var viewData = model.Select(q => new ReadOnlyBlogPostRequestVM
             {
+                Id = q.Id,
                 Heading = q.Heading,
                 PageTitle = q.PageTitle,
                 Content = q.Content,
@@ -45,10 +46,8 @@ namespace Bloggie.Controllers
                 Tags = q.Tags
             });
 
-
             return View(viewData);
         }
-
 
 
         [HttpGet]
@@ -123,6 +122,117 @@ namespace Bloggie.Controllers
 
             return RedirectToAction(actionName: nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid id)
+        {
+            // Retrieve item from the database through the repository
+            var model = await _blogPostRepository.Get(id);
+
+            // Fetch all tags from the database
+            var tagsDomainModel = await _tagRepository.GetAll();
+
+            // Convert/map from the Domain Model to the View Model, and model-bind it to the view
+            if (model != null)
+            {
+                var viewModel = new EditBlogPostRequestVM
+                {
+                    Id = model.Id,
+                    Heading = model.Heading,
+                    Content = model.Content,
+                    ShortDescription = model.ShortDescription,
+                    FeaturedImgUrl = model.FeaturedImgUrl,
+                    UrlHandle = model.UrlHandle,
+                    PublishedDate = model.PublishedDate,
+                    Author = model.Author,
+                    isVisible = model.isVisible,
+                    // Convert the Tags property to a list (so the user can select)
+                    Tags = tagsDomainModel
+                    .Select(q => new SelectListItem
+                    {
+                        Text = q.DisplayName,
+                        Value = q.Id.ToString()
+                    }),
+                    // Display user selected tags
+                    SelectedTags = model.Tags.Select(q => q.Id.ToString()).ToArray()
+                };
+                return View(viewModel);
+            }
+            // return View(viewModel);
+            return View(null);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Update(EditBlogPostRequestVM viewModel)
+        {
+            // Map View Model back to Domain Model
+            var domainModel = new BlogPost
+            {
+                Id = viewModel.Id,
+                Heading = viewModel.Heading,
+                PageTitle = viewModel.PageTitle,
+                Content = viewModel.Content,
+                ShortDescription = viewModel.ShortDescription,
+                FeaturedImgUrl = viewModel.FeaturedImgUrl,
+                UrlHandle = viewModel.UrlHandle,
+                PublishedDate = viewModel.PublishedDate,
+                Author = viewModel.Author,
+                isVisible = viewModel.isVisible
+            };
+
+            // Map Tags to Domain Mo
+            // Loop, and check if a tag do exist for a record, then model-bind it to model var
+            var selectedTags = new List<Tag>();
+            foreach (var selectedTag in viewModel.SelectedTags)
+            {
+                // if Id exists (but before that parse it to string)
+                if (Guid.TryParse(selectedTag, out var tag))
+                {
+                    var foundTag = await _tagRepository.Get(tag);
+                    if (foundTag != null)
+                    {
+                        selectedTags.Add(foundTag);
+                    }
+                }
+                domainModel.Tags = selectedTags;
+            }
+            // Submit to repository and update
+            var updatedBlog = await _blogPostRepository.Update(domainModel);
+            if (updatedBlog != null)
+            {
+                // Redirect to Index
+                return RedirectToAction(nameof(Index));
+            }
+            // Error finding or saving record
+            return RedirectToAction(nameof(Add));
+        }
+
+        // Delete
+        [HttpGet]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var model = await _blogPostRepository.Get(id);
+            // Map Domain Model to View Model
+            if (model != null)
+            {
+                var viewModel = new ReadOnlyBlogPostRequestVM
+                {
+                    Id = model.Id,
+                    Heading = model.Heading,
+                };
+                return View(viewModel);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [ActionName("Delete")]
+        public async Task<IActionResult> ConfirmDelete(Guid id)
+        {
+            await _blogPostRepository.Delete(id);
+            return RedirectToAction(nameof(Index));
+
+            //    return RedirectToAction(nameof(Add));
+        }
+
         #endregion
     }
 }

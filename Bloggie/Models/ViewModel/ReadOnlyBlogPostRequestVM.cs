@@ -1,4 +1,5 @@
 ﻿using Bloggie.Models.Domain;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Bloggie.Models.ViewModel
 {
@@ -15,7 +16,7 @@ namespace Bloggie.Models.ViewModel
         public string Author { get; set; }
         public bool isVisible { get; set; }
 
-        // Navigation property - which tells EF Core that this is a related property.
+        // Navigation property - which tells EF Core that this is a related property.   
         public ICollection<Tag> Tags { get; set; }
     }
 }

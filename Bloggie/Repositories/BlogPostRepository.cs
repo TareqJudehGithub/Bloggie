@@ -1,5 +1,6 @@
 ﻿using Bloggie.Data;
 using Bloggie.Models.Domain;
+using Bloggie.Models.ViewModel;
 using Microsoft.EntityFrameworkCore;
 
 namespace Bloggie.Repositories
@@ -30,44 +31,61 @@ namespace Bloggie.Repositories
 
         public async Task<BlogPost> Get(Guid id)
         {
-            var blogPost = await _bloggieDbContext.BlogPosts.FirstOrDefaultAsync(q => q.Id == id);
-
+            // Using .Include() here to bring from the database a related property (navigation property)
+            // from the BlogPost Domain Model           
+            var blogPost = await _bloggieDbContext.BlogPosts
+                .Include(u => u.Tags)
+                .FirstOrDefaultAsync(q => q.Id == id);
             return blogPost;
         }
+
         public async Task<BlogPost> Add(BlogPost blogPost)
         {
             await _bloggieDbContext.BlogPosts.AddAsync(blogPost);
             await _bloggieDbContext.SaveChangesAsync();
             return blogPost;
         }
-        public async Task<BlogPost> Update(BlogPost blogPost)
+        public async Task<BlogPost?> Update(BlogPost blogPost)
         {
-            var existingPost = await _bloggieDbContext.BlogPosts
+            // Include()  makes sure the Tags navigation property is included in the Update as well
+            var existingBlog = await _bloggieDbContext.BlogPosts
+                .Include(q => q.Tags)
                  .FirstOrDefaultAsync(q => q.Id == blogPost.Id);
 
-            if (existingPost != null)
-            {
-                existingPost.Heading = blogPost.Heading;
-                existingPost.PageTitle = blogPost.PageTitle;
-                existingPost.Content = blogPost.Content;
-                existingPost.ShortDescription = blogPost.ShortDescription;
-                existingPost.FeaturedImgUrl = blogPost.FeaturedImgUrl;
-                existingPost.UrlHandle = blogPost.UrlHandle;
-                existingPost.PublishedDate = blogPost.PublishedDate;
-                existingPost.Author = blogPost.Author;
-                existingPost.isVisible = blogPost.isVisible;
-            }
-            _bloggieDbContext.BlogPosts.Update(existingPost);
-            await _bloggieDbContext.SaveChangesAsync();
 
-            return existingPost;
+            if (existingBlog != null)
+            {
+                // Update the record it self in the database
+                existingBlog.Id = blogPost.Id;
+                existingBlog.Heading = blogPost.Heading;
+                existingBlog.PageTitle = blogPost.PageTitle;
+                existingBlog.Content = blogPost.Content;
+                existingBlog.ShortDescription = blogPost.ShortDescription;
+                existingBlog.FeaturedImgUrl = blogPost.FeaturedImgUrl;
+                existingBlog.UrlHandle = blogPost.UrlHandle;
+                existingBlog.PublishedDate = blogPost.PublishedDate;
+                existingBlog.Author = blogPost.Author;
+                existingBlog.isVisible = blogPost.isVisible;
+                existingBlog.Tags = blogPost.Tags;
+
+                // Or: _bloggieDbContext.BlogPosts.Update(existingBlog);
+                await _bloggieDbContext.SaveChangesAsync();
+
+                return existingBlog;
+            }
+            return null;
         }
-        public async Task<BlogPost> Delete(Guid id)
+        public async Task<BlogPost?> Delete(Guid id)
         {
             var blogPost = await _bloggieDbContext.BlogPosts.FirstOrDefaultAsync(q => q.Id == id);
-            _bloggieDbContext.BlogPosts.Remove(blogPost);
-            await _bloggieDbContext.SaveChangesAsync();
-            return blogPost;
+
+            if (blogPost != null)
+            {
+                _bloggieDbContext.BlogPosts.Remove(blogPost);
+                await _bloggieDbContext.SaveChangesAsync();
+                return blogPost;
+            }
+            return null;
         }
         #endregion
     }

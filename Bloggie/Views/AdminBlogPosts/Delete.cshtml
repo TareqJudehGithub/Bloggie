@@ -1,0 +1,28 @@
+﻿@model ReadOnlyBlogPostRequestVM
+
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Blog Posts List - Admin Functionality</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="container py-5">
+        <div class="mb-3">
+            <p class="">Delete <strong>@Model.Heading</strong> with ID: @Model.Id?</p>
+        </div>
+
+
+        <form asp-controller="AdminBlogPosts" asp-action="Delete" method="post">
+            <div class="mb-3">
+
+                <button class="btn btn-danger" type="submit">Delete</button>
+                <a class="btn btn-secondary"
+                   asp-controller="AdminBlogPosts"
+                   asp-action="Index">Cancel</a>
+            </div>
+        </form>
+
+    </div>
+</div>
+

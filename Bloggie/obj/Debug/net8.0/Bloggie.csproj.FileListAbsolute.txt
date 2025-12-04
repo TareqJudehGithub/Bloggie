@@ -1,8 +1,8 @@
-E:\WebDev\Bloggie\Bloggie\bin\Debug\net8.0\Bloggie.exe
 E:\WebDev\Bloggie\Bloggie\bin\Debug\net8.0\appsettings.Development.json
 E:\WebDev\Bloggie\Bloggie\bin\Debug\net8.0\appsettings.json
 E:\WebDev\Bloggie\Bloggie\bin\Debug\net8.0\Bloggie.staticwebassets.runtime.json
 E:\WebDev\Bloggie\Bloggie\bin\Debug\net8.0\Bloggie.staticwebassets.endpoints.json
+E:\WebDev\Bloggie\Bloggie\bin\Debug\net8.0\Bloggie.exe
 E:\WebDev\Bloggie\Bloggie\bin\Debug\net8.0\Bloggie.deps.json
 E:\WebDev\Bloggie\Bloggie\bin\Debug\net8.0\Bloggie.runtimeconfig.json
 E:\WebDev\Bloggie\Bloggie\bin\Debug\net8.0\Bloggie.dll
@@ -127,6 +127,7 @@ E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.csproj.CoreCompileInputs.cach
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.MvcApplicationPartsAssemblyInfo.cache
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.RazorAssemblyInfo.cache
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.RazorAssemblyInfo.cs
+E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.sourcelink.json
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\rjimswa.dswa.cache.json
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json
@@ -145,4 +146,3 @@ E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\refint\Bloggie.dll
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.pdb
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.genruntimeconfig.cache
 E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\ref\Bloggie.dll
-E:\WebDev\Bloggie\Bloggie\obj\Debug\net8.0\Bloggie.sourcelink.json

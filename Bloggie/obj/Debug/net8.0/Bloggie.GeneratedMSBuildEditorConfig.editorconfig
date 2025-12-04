@@ -26,8 +26,16 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CbG9nUG9zdHNcQWRkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/WebDev/Bloggie/Bloggie/Views/AdminBlogPosts/Delete.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CbG9nUG9zdHNcRGVsZXRlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/WebDev/Bloggie/Bloggie/Views/AdminBlogPosts/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CbG9nUG9zdHNcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/WebDev/Bloggie/Bloggie/Views/AdminBlogPosts/Update.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWRtaW5CbG9nUG9zdHNcVXBkYXRlLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/WebDev/Bloggie/Bloggie/Views/AdminTags/Add.cshtml]

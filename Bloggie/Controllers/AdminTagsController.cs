@@ -47,16 +47,16 @@ namespace Bloggie.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var viewModel = await _tagRepository.Get(id);
+            var model = await _tagRepository.Get(id);
 
             // Convert to View Model - EditTagRequest
-            if (viewModel != null)
+            if (model != null)
             {
                 var viewData = new EditTagRequestVM
                 {
-                    Id = viewModel.Id,
-                    Name = viewModel.Name,
-                    DisplayName = viewModel.DisplayName
+                    Id = model.Id,
+                    Name = model.Name,
+                    DisplayName = model.DisplayName
                 };
 
                 return View(viewData);
