@@ -46,6 +46,11 @@ namespace Bloggie.Controllers
                 Tags = q.Tags
             });
 
+            if (viewData.Count() == 0)
+            {
+                TempData["AlertType"] = "secondary";
+                TempData["AlertMessage"] = "No blogs were found! Try posting some :)";
+            }
             return View(viewData);
         }
 

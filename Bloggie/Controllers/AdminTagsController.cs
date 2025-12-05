@@ -7,6 +7,7 @@ using Bloggie.Repositories;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Bloggie.Controllers
 {
@@ -27,9 +28,16 @@ namespace Bloggie.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var viewModel = await _tagRepository.GetAll();
+            var domainModel = await _tagRepository.GetAll();
+            // Convert to View Model data
+            var viewData = domainModel.Select(q => new ReadOnlyTagRequestVM
+            {
+                Id = q.Id,
+                Name = q.Name,
+                DisplayName = q.DisplayName
+            });
 
-            return View(viewModel);
+            return View(viewData);
         }
 
         [HttpGet]
@@ -40,7 +48,12 @@ namespace Bloggie.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddTagRequestVM addTagRequest)
         {
-            await _tagRepository.Add(addTagRequest);
+            var model = new Tag
+            {
+                Name = addTagRequest.Name,
+                DisplayName = addTagRequest.DisplayName
+            };
+            await _tagRepository.Add(model);
             return RedirectToAction(nameof(Index));
         }
 
@@ -66,22 +79,62 @@ namespace Bloggie.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(EditTagRequestVM editTagRequest)
         {
-            await _tagRepository.Edit(editTagRequest);
-            return RedirectToAction(nameof(Index));
+            // Convert back to Domain model
+            var domainModel = new Tag
+            {
+                Id = editTagRequest.Id,
+                Name = editTagRequest.Name,
+                DisplayName = editTagRequest.DisplayName
+            };
+            await _tagRepository.Edit(domainModel);
+
+            if (ModelState.IsValid)
+            {
+                TempData["AlertType"] = "info";
+                TempData["AlertMessage"] = "Tag was successfully updated!";
+
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["AlertType"] = "danger";
+            TempData["AlertMessage"] = "Tag not found error!";
+            return RedirectToAction(nameof(Add));
         }
 
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var viewModel = await _tagRepository.Get(id);
+            var model = await _tagRepository.Get(id);
 
-            return View(viewModel);
+            // Map Domain Model to View Model
+            if (model != null)
+            {
+                var viewData = new ReadOnlyTagRequestVM
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    DisplayName = model.DisplayName
+                };
+
+                return View(viewData);
+            }
+
+            TempData["AlertType"] = "danger";
+            TempData["AlertMessage"] = "Error deleting tag!";
+            return RedirectToAction(nameof(Index));
         }
         [HttpPost]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid Id)
         {
-            await _tagRepository.Delete(Id);
+            if (ModelState.IsValid)
+            {
+                TempData["AlertType"] = "info";
+                TempData["AlertMessage"] = "Tag deleted successfully!";
+                await _tagRepository.Delete(Id);
+                return RedirectToAction(nameof(Index));
+            }
+            TempData["AlertType"] = "danger";
+            TempData["AlertMessage"] = "Error deleting tag!";
             return RedirectToAction(nameof(Index));
         }
     }

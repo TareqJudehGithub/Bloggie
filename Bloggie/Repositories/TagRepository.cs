@@ -20,66 +20,50 @@ namespace Bloggie.Repositories
         #endregion
 
         #region methods  
-        public async Task<IEnumerable<ReadOnlyTagRequestVM>> GetAll()
+        public async Task<IEnumerable<Tag>> GetAll()
         {
-            var data = await _dbContext.Tags.ToListAsync();
+            var domainModel = await _dbContext.Tags.ToListAsync();
 
-            // Convert to View Model data
-            var viewData = data.Select(q => new ReadOnlyTagRequestVM
-            {
-                Id = q.Id,
-                Name = q.Name,
-                DisplayName = q.DisplayName
-            });
-            return viewData;
+
+            return domainModel;
         }
-        public async Task<Tag> Get(Guid id)
+        public async Task<Tag?> Get(Guid id)
         {
 
             var tag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == id);
-            // Convert/map Model to View Model
-            var viewData = new ReadOnlyTagRequestVM
-            {
-                Id = tag.Id,
-                Name = tag.Name,
-                DisplayName = tag.DisplayName
-            };
+            return tag;
+        }
+        public async Task<Tag> Add(Tag tag)
+        {
+
+            await _dbContext.Tags.AddAsync(tag);
+            await _dbContext.SaveChangesAsync();
 
             return tag;
         }
-        public async Task<Tag> Add(AddTagRequestVM viewModel)
+        public async Task<Tag?> Edit(Tag tag)
         {
-            // 1. 'manual way' of model binding Model data, mapping AddTagRequestVM to Tag domain model       
-            var model = new Tag
-            {
-                //  Id = viewModel.Id,
-                Name = viewModel.Name,
-                DisplayName = viewModel.DisplayName
-            };
-            // Adding the newly created record and saving into the database
-            await _dbContext.Tags.AddAsync(model);
-            await _dbContext.SaveChangesAsync();
+            // Fetch the record to be updated
+            var existingTag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == tag.Id);
 
-            return model;
-        }
-        public async Task<Tag> Edit(EditTagRequestVM viewModel)
-        {
-            var existingTag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == viewModel.Id);
-
+            // Check for null and update
             if (existingTag != null)
             {
-                existingTag.Name = viewModel.Name;
-                existingTag.DisplayName = viewModel.DisplayName;
+                existingTag.Name = tag.Name;
+                existingTag.DisplayName = tag.DisplayName;
 
-                _dbContext.Tags.Update(existingTag);
+                // Or _dbContext.Tags.Update(existingTag);
+
+                // And save to the database
                 await _dbContext.SaveChangesAsync();
 
+                // Back to the controller now
                 return existingTag;
             }
             return null;
         }
 
-        public async Task<Tag> Delete(Guid Id)
+        public async Task<Tag?> Delete(Guid Id)
         {
             var tag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == Id);
 

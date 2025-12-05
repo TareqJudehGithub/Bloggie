@@ -29,7 +29,7 @@ namespace Bloggie.Repositories
             return model;
         }
 
-        public async Task<BlogPost> Get(Guid id)
+        public async Task<BlogPost?> Get(Guid id)
         {
             // Using .Include() here to bring from the database a related property (navigation property)
             // from the BlogPost Domain Model           
