@@ -5,7 +5,6 @@
         <h1>Blog Posts List - Admin Functionality</h1>
     </div>
 </div>
-
 <div class="container py-5">
     @{
         if (Model != null && Model.Any())
@@ -31,34 +30,34 @@
                         *@
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="">
                     @foreach (var item in Model)
                     {
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Id)</td>
                             <td>@Html.DisplayFor(modelItem => item.Heading)</td>
-                            <td>@Html.DisplayFor(modelItem => item.PageTitle)</td>
+                            <td><strong>@Html.DisplayFor(modelItem => item.PageTitle)</strong></td>
                             <td>@Html.DisplayFor(modelItem => item.isVisible)</td>
                             <td>
 
-                                <div class="d-flex">
+                                <div class="">
                                     @foreach (var tag in item.Tags)
                                     {
-                                        <p class="btn btn-secondary me-1">
+                                        <p class="btn btn-secondary p-1">
                                             @Html.DisplayFor(modelItem => tag.DisplayName)
                                         </p>
                                     }
                                 </div>
                             </td>
                             <td>
-                                <div class="mb-3 d-flex">
-                                    <a class="btn btn-dark m-1"
+                                <div class="">
+                                    <a class="btn btn-dark p-1"
                                        asp-controller="AdminBlogPosts"
                                        asp-action="Update"
                                        asp-route-id="@item.Id">
-                                        Update
+                                        Edit
                                     </a>
-                                    <a class="btn btn-secondary m-1"
+                                    <a class="btn btn-secondary p-1"
                                        asp-controller="AdminBlogPosts"
                                        asp-action="Delete"
                                        asp-route-id="@item.Id">
@@ -78,8 +77,6 @@
             </div>
         }
     }
-
-
 </div>
 
 
