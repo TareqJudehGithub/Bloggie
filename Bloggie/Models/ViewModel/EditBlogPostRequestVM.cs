@@ -1,5 +1,6 @@
 ﻿using Bloggie.Models.Domain;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bloggie.Models.ViewModel
 {

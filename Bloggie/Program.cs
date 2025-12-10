@@ -20,6 +20,8 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 // Injecting IBlogPostRepository
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 
+// Injecting Cloudinary 
+builder.Services.AddScoped<IImageRepository, CloudinaryImageRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

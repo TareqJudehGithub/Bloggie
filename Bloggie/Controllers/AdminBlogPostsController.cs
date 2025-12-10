@@ -144,6 +144,7 @@ namespace Bloggie.Controllers
                 {
                     Id = model.Id,
                     Heading = model.Heading,
+                    PageTitle = model.PageTitle,
                     Content = model.Content,
                     ShortDescription = model.ShortDescription,
                     FeaturedImgUrl = model.FeaturedImgUrl,
@@ -202,6 +203,7 @@ namespace Bloggie.Controllers
             }
             // Submit to repository and update
             var updatedBlog = await _blogPostRepository.Update(domainModel);
+
             if (updatedBlog != null)
             {
                 // Redirect to Index
