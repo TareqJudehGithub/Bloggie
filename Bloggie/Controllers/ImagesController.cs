@@ -25,7 +25,7 @@ namespace Bloggie.Controllers
 
         #endregion
         public async Task<IActionResult> UploadAsync(IFormFile file)
-        // This method lets us upload an image into the cloud, using 
+        // This method lets us upload an image into the cloud, using Fraola
         {
             // call a repository
             var imageUrl = await _imageRepository.UploadAsync(file);

@@ -12,48 +12,59 @@
 
         <div class="mb-3">
             <label class="form-label" asp-for="Heading">Heading</label>
-            <input id="heading" class="form-control" type="text" asp-for="Heading" id="" />
+            <input id="heading" class="form-control" type="text" asp-for="Heading"/>
         </div>
 
         <div class="mb-3">
             <label class="form-label" asp-for="PageTitle">Page Title</label>
-            <input id="pageTitle" class="form-control" type="text" asp-for="PageTitle" id="" />
+            <input id="pageTitle" class="form-control" type="text" asp-for="PageTitle"/>
         </div>
 
         <div class="mb-3">
             <label class="form-label" asp-for="Content">Content</label>
-            <textarea id="content" class="form-control" rows="4" asp-for="Content" id="">    
+            <textarea id="content" class="form-control" rows="4" asp-for="Content">    
             </textarea>
         </div>
 
         <div class="mb-3">
             <label class="form-label" asp-for="ShortDescription">Short Description</label>
-            <input id="shortDiscription" class="form-control" type="text" asp-for="ShortDescription" id="" />
+            <input id="shortDiscription" class="form-control" type="text" asp-for="ShortDescription"/>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="featuredImageUpload">Featured Image Upload</label>
+            <input id="featuredImageUpload" class="form-control" type="file"/>
+
+            <img 
+                 src="" alt="Blog image" 
+                 id="featuredImageDisplay" 
+                 style="display:none; width: 150px;"
+                 />
         </div>
 
         <div class="mb-3">
             <label class="form-label" asp-for="FeaturedImgUrl">Featured Image URL</label>
-            <input id="featuredImgUrl" class="form-control" type="text" asp-for="FeaturedImgUrl" id="" />
+            <input id="featuredImgUrl" class="form-control" type="text" asp-for="FeaturedImgUrl"/>
         </div>
 
         <div class="mb-3">
             <label class="form-label" asp-for="UrlHandle">URL Handle</label>
-            <input id="" class="form-control" type="text" asp-for="UrlHandle" id="" />
+            <input id="" class="form-control" type="text" asp-for="UrlHandle"/>
         </div>
 
         <div class="mb-3">
             <label class="form-label" asp-for="PublishedDate">Published Date</label>
-            <input id="publishedDate" class="form-control" type="date" asp-for="PublishedDate" id="" />
+            <input id="publishedDate" class="form-control" type="date" asp-for="PublishedDate"/>
         </div>
         
         <div class="mb-3">
             <label class="form-label" asp-for="Author">Author</label>
-            <input id="author" class="form-control" type="text" asp-for="Author" id="" />
+            <input id="author" class="form-control" type="text" asp-for="Author"/>
         </div>
         
         <div class="form-check mb-3">
             <input id=isVisible" class="form-check-input" type="checkbox" asp-for="isVisible">
-            <label class="form-check-label" asp-for="isVisible" id="">
+            <label class="form-check-label" asp-for="isVisible">
                 Is Visible?
             </label>
         </div>
@@ -106,9 +117,47 @@
 </div>
 
 
+@{ /* Froala Image Upload */}
+
 @section Scripts {
     <script>
-        var editor = new FroalaEditor("#content");
+        var editor = new FroalaEditor("#content",
+            {
+                // Upload the image file through ImagesController
+                imageUploadUrl: "/api/images"  // Upload the images using this controller instead
+            });
+     
+        // Image upload 
+        const featuredUploadElement = document.getElementById("featuredImageUpload");
+        // Featured image url
+        const featuredImageUrlElement = document.getElementById("featuredImgUrl");
+        // Featured image display featuredImageDisplay
+        const featuredImageElement = document.getElementById("featuredImageDisplay");
+
+
+        async function uploadFeatureImage(e) {
+            console.log(e.target.files[0]);
+        let data = new FormData();
+        data.append("file", e.target.files[0]);
+
+        await fetch("/api/images", {
+            method: "POST",
+            headers: {
+                "Accept": "*/*",
+            },
+            body: data
+        })
+            .then(response => response.json())
+            .then(result => {                
+                // Paste image url (result) in Featured Image URL field
+                featuredImageUrlElement.value = result.link;  // image link url
+                featuredImageElement.src = result.link;  // display image
+                featuredImageElement.style.display = "block";
+            });
+        }
+
+
+        featuredUploadElement.addEventListener("change", uploadFeatureImage);
     </script>
 }
 
