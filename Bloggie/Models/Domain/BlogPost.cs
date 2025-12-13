@@ -2,7 +2,7 @@
 
 namespace Bloggie.Models.Domain
 {
-    [Table(name: "BlogPost", Schema = "dbo")]
+    [Table(name: "BlogPosts", Schema = "dbo")]
     public class BlogPost
     {
         public Guid Id { get; set; }

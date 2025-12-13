@@ -1,8 +1,73 @@
-﻿@{
+﻿@model IEnumerable<ReadOnlyBlogPostRequestVM>  
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container col-xxl-8 px-4 py-5"> 
+    <div class="row align-items-center g-5 py-5">
+        <div class="col-12 col-lg-6">
+            <h1 class="display-5 fw-bold lh-1 mb-3">
+                Bloggie - The Dev Blog
+            </h1>
+            <p class="lead">
+                Bloggie is the home to coding blocks covering a vast range of topics like
+                HTML, CSS, JavaScript, ASP.NET, C#, and angular.
+                Want to read the latest dev articles? Join the Bloggie app and get weekly blogs in your email.
+            </p>
+        </div>
+
+        <div class="col-12 col-lg-6">
+            <img 
+                 class="rounded d-block mx-lg-auto img-fluid" 
+                 width="400"
+                 src="https://media.istockphoto.com/id/465540438/photo/laptop-computer-on-cafe-table-with-defocused-background.jpg?s=612x612&w=0&k=20&c=iazk3kJKsGrTc0yYqqdhTSUPCqLfbrNh-ARhSysdVdQ=" 
+                 alt="Bloggie - Dev Blogs"/>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            @if (Model != null && Model.Any())
+            {
+                foreach(var blogPost in Model)
+                {
+                  <div class="mb-5 bg-light box-shadow p-2">
+                      <img 
+                           class="mb-4 d-block img-fluid"  
+                           src="@Html.DisplayFor(modelItem => blogPost.FeaturedImgUrl)" alt="@blogPost.Heading"/>
+
+                      <h2 class="mb-4">@Html.DisplayFor(modelItem => blogPost.Heading)</h2>
+
+                      <p class="mb-3 row">
+                          <span class="col-12">Author: @Html.DisplayFor(modelItem => blogPost.Author)</span>
+                          <span class="col-12">Date: @blogPost.PublishedDate.ToShortDateString()</span>
+                      </p>
+                          <p class="mb-3">@Html.DisplayFor(modelItem => blogPost.ShortDescription)</p>
+
+                          
+                              <div class="row mb-3">
+                                  <div class="col-6">
+                                      @foreach (var tag in blogPost.Tags)
+                                      {
+                                          <p class="btn btn-secondary p-1">
+                                              @Html.DisplayFor(modelItem => tag.Name)
+                                          </p>
+                                      }
+                                  </div>
+                                  <div class="col-6 ms-1">
+                                      <a href="#" class="btn btn-dark">Details</a>
+                                  </div>
+                              </div>                          
+
+                  </div>
+
+                }
+            }
+          
+        </div>
+    </div>
 </div>

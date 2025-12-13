@@ -2,7 +2,7 @@
 
 namespace Bloggie.Models.Domain
 {
-    [Table(name: "Tag", Schema = "dbo")]
+    [Table(name: "Tags", Schema = "dbo")]
     public class Tag
     {
         #region Properties
