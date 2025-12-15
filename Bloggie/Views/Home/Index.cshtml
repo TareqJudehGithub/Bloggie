@@ -47,19 +47,25 @@
                           <span class="col-12">Date: @blogPost.PublishedDate.ToShortDateString()</span>
                       </p>
                           <p class="mb-3">@Html.DisplayFor(modelItem => blogPost.ShortDescription)</p>
-
                           
                               <div class="row mb-3">
                                   <div class="col-6">
                                       @foreach (var tag in blogPost.Tags)
                                       {
-                                          <p class="btn btn-secondary p-1">
+                                          <p class="btn btn-secondary rounded-pill p-1">
                                               @Html.DisplayFor(modelItem => tag.Name)
                                           </p>
                                       }
                                   </div>
                                   <div class="col-6 ms-1">
-                                      <a href="#" class="btn btn-dark">Details</a>
+                                      <a 
+                                         class="btn btn-dark"
+                                         asp-controller="Blogs"
+                                         asp-action="Index"
+                                         asp-route-urlHandle="@blogPost.UrlHandle"
+                                         >
+                                      Read More
+                                      </a>
                                   </div>
                               </div>                          
 
@@ -71,3 +77,4 @@
         </div>
     </div>
 </div>
+
