@@ -10,17 +10,24 @@ namespace Bloggie.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IBlogPostRepository _blogPostRepository;
+        private readonly ITagRepository _tagRepository;
 
-        public HomeController(ILogger<HomeController> logger,
-            IBlogPostRepository blogPostRepository)
+        public HomeController(
+            ILogger<HomeController> logger,
+            IBlogPostRepository blogPostRepository,
+            ITagRepository tagRepository
+            )
         {
             _logger = logger;
             _blogPostRepository = blogPostRepository;
+            _tagRepository = tagRepository;
         }
 
         public async Task<IActionResult> Index()
         {
             var model = await _blogPostRepository.GetAll();
+            var tags = await _tagRepository.GetAll();
+
             var viewData = model.Select(q => new ReadOnlyBlogPostRequestVM
             {
                 Id = q.Id,
@@ -40,7 +47,14 @@ namespace Bloggie.Controllers
                 TempData["AlertType"] = "secondary";
                 TempData["AlertMessage"] = "No blogs were found! Try posting some :)";
             }
-            return View(viewData);
+
+            var viewModel = new HomeViewModel
+            {
+                BlogPosts = viewData,
+                Tags = tags
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Privacy()
