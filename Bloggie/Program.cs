@@ -1,18 +1,29 @@
 using Microsoft.EntityFrameworkCore;
 using Bloggie.Data;
 using Bloggie.Repositories;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Inject DbContext inside Services using DI
+// Inject DbContext - DB connection inside Services using DI
 // Define the connection string as a value
-var connectionString = builder.Configuration.GetConnectionString("MSSQLSRV");
+var dBConnectionString = builder.Configuration.GetConnectionString("MSSQLSRV");
 builder.Services.AddDbContext<BloggieDbContext>(options =>
-options.UseSqlServer(connectionString)
+options.UseSqlServer(dBConnectionString)
 );
+
+// Inject DbContext - Identity connection 
+var authConnectionString = builder.Configuration.GetConnectionString("BloogieAuthDb");
+builder.Services.AddDbContext<AuthDbContext>(options =>
+options.UseSqlServer(authConnectionString)
+);
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AuthDbContext>();
+
+
 
 // Injecting ITagRepository
 builder.Services.AddScoped<ITagRepository, TagRepository>();
@@ -37,6 +48,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// Authenticate the Identity users
+app.UseAuthentication();
 
 app.UseAuthorization();
 

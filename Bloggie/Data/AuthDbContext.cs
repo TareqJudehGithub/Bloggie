@@ -78,7 +78,6 @@ namespace Bloggie.Data
             // IdentityUserRole requires a key of type string.
 
             // By adding all roles to SuperAdminUser, they can log as User, Admin, and SuperAdminUser
-
             var superAdminRoles = new List<IdentityUserRole<string>>
             {
              new IdentityUserRole<string>

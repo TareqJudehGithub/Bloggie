@@ -3,8 +3,20 @@
   "WorkspaceRootPath": "E:\\WebDev\\Bloggie\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{233C4915-7780-955B-4C75-06DF3BDA7F3F}|Bloggie\\Bloggie.csproj|e:\\webdev\\bloggie\\bloggie\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{233C4915-7780-955B-4C75-06DF3BDA7F3F}|Bloggie\\Bloggie.csproj|solutionrelative:bloggie\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|E:\\WebDev\\Bloggie\\Bloggie\\Migrations\\AuthDb\\20251218135800_Creating Auth Db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Bloggie\\Migrations\\AuthDb\\20251218135800_Creating Auth Db.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{233C4915-7780-955B-4C75-06DF3BDA7F3F}|Bloggie\\Bloggie.csproj|e:\\webdev\\bloggie\\bloggie\\data\\authdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{233C4915-7780-955B-4C75-06DF3BDA7F3F}|Bloggie\\Bloggie.csproj|solutionrelative:bloggie\\data\\authdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{233C4915-7780-955B-4C75-06DF3BDA7F3F}|Bloggie\\Bloggie.csproj|e:\\webdev\\bloggie\\bloggie\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{233C4915-7780-955B-4C75-06DF3BDA7F3F}|Bloggie\\Bloggie.csproj|solutionrelative:bloggie\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,8 +26,34 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 5,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "20251218135800_Creating Auth Db.cs",
+              "DocumentMoniker": "E:\\WebDev\\Bloggie\\Bloggie\\Migrations\\AuthDb\\20251218135800_Creating Auth Db.cs",
+              "RelativeDocumentMoniker": "Bloggie\\Migrations\\AuthDb\\20251218135800_Creating Auth Db.cs",
+              "ToolTip": "E:\\WebDev\\Bloggie\\Bloggie\\Migrations\\AuthDb\\20251218135800_Creating Auth Db.cs",
+              "RelativeToolTip": "Bloggie\\Migrations\\AuthDb\\20251218135800_Creating Auth Db.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAcwBcAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-18T13:58:00.481Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "AuthDbContext.cs",
+              "DocumentMoniker": "E:\\WebDev\\Bloggie\\Bloggie\\Data\\AuthDbContext.cs",
+              "RelativeDocumentMoniker": "Bloggie\\Data\\AuthDbContext.cs",
+              "ToolTip": "E:\\WebDev\\Bloggie\\Bloggie\\Data\\AuthDbContext.cs",
+              "RelativeToolTip": "Bloggie\\Data\\AuthDbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAGAAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-18T13:53:13.031Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
@@ -31,14 +69,27 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "AuthDbContext.cs",
-              "DocumentMoniker": "E:\\WebDev\\Bloggie\\Bloggie\\Data\\AuthDbContext.cs",
-              "RelativeDocumentMoniker": "Bloggie\\Data\\AuthDbContext.cs",
-              "ToolTip": "E:\\WebDev\\Bloggie\\Bloggie\\Data\\AuthDbContext.cs",
-              "RelativeToolTip": "Bloggie\\Data\\AuthDbContext.cs",
-              "ViewState": "AgIAADwAAAAAAAAAAADwv04AAAAAAAAAAAAAAA==",
+              "Title": "appsettings.json",
+              "DocumentMoniker": "E:\\WebDev\\Bloggie\\Bloggie\\appsettings.json",
+              "RelativeDocumentMoniker": "Bloggie\\appsettings.json",
+              "ToolTip": "E:\\WebDev\\Bloggie\\Bloggie\\appsettings.json",
+              "RelativeToolTip": "Bloggie\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-12-18T13:05:28.339Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "E:\\WebDev\\Bloggie\\Bloggie\\Program.cs",
+              "RelativeDocumentMoniker": "Bloggie\\Program.cs",
+              "ToolTip": "E:\\WebDev\\Bloggie\\Bloggie\\Program.cs",
+              "RelativeToolTip": "Bloggie\\Program.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAABIAAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-12-17T14:07:38.515Z",
+              "WhenOpened": "2025-12-18T13:05:27.623Z",
               "EditorCaption": ""
             }
           ]
