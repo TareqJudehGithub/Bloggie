@@ -8,7 +8,7 @@ namespace Bloggie.Data
 {
     public class AuthDbContext : IdentityDbContext
     {
-        public AuthDbContext(DbContextOptions options) : base(options)
+        public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
         {
 
         }
@@ -18,6 +18,7 @@ namespace Bloggie.Data
         {
             base.OnModelCreating(builder);
 
+            // Roles Ids
             var superAdminRoleId = "b67a3bfa-eb80-42c2-b096-43925edaec5d";
             var adminRoleId = "9da61983-fbb8-48f2-8dd8-70ab98123f23";
             var userRoleId = "28e8d689-8ea8-4db0-afd0-4c84f5220f21";

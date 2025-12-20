@@ -1,0 +1,30 @@
+﻿@model RegisterVM
+
+<div class="container mx-auto">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-6">
+            <h1 class="mt-3 mb-3 h3">Register</h1>
+
+            <form class="" method="post">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input class="form-control" type="text" id="username" placeholder="Username..." autofocus  asp-for="Username"/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input class="form-control" type="email" id="email" placeholder="example@email.com" 
+                           asp-for="Email"/>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input class="form-control" type="password" id="password" placeholder="password..." asp-for="Password"/>
+                </div>
+                <div class="mb-3">
+                    <button class="btn btn-dark" type="submit">Register</button>
+                    <a class="btn btn-secondary" href="#">Cancel</a>
+                </div>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
