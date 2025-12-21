@@ -13,7 +13,7 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>@Html.DisplayNameFor(model => model.Id)</th>
+                        @*<th>@Html.DisplayNameFor(model => model.Id)</th>*@
                         <th>@Html.DisplayNameFor(model => model.Heading)</th>
                         <th>@Html.DisplayNameFor(model => model.PageTitle)</th>
                         <th>@Html.DisplayNameFor(model => model.isVisible)</th>
@@ -34,30 +34,30 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+                            @*<td>@Html.DisplayFor(modelItem => item.Id)</td>*@
                             <td>@Html.DisplayFor(modelItem => item.Heading)</td>
                             <td><strong>@Html.DisplayFor(modelItem => item.PageTitle)</strong></td>
                             <td>@Html.DisplayFor(modelItem => item.isVisible)</td>
                             <td>
 
-                                <div class="">
+                                <div class="d-flex flex-wrap justify-content-start">
                                     @foreach (var tag in item.Tags)
                                     {
-                                        <p class="btn btn-secondary p-1">
+                                        <span class="btn btn-secondary p-0 m-1">
                                             @Html.DisplayFor(modelItem => tag.Name)
-                                        </p>
+                                        </span>
                                     }
                                 </div>
                             </td>
                             <td>
-                                <div class="">
-                                    <a class="btn btn-dark p-1"
+                                <div class="d-flex flex-row justify-content-start">
+                                    <a class="link-dark p-1"
                                        asp-controller="AdminBlogPosts"
                                        asp-action="Update"
                                        asp-route-id="@item.Id">
                                         Edit
                                     </a>
-                                    <a class="btn btn-secondary p-1"
+                                    <a class="link-danger p-1"
                                        asp-controller="AdminBlogPosts"
                                        asp-action="Delete"
                                        asp-route-id="@item.Id">

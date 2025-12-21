@@ -1,13 +1,12 @@
 ﻿// Ignore Spelling: bloggie
 
-using Bloggie.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 using Bloggie.Models.Domain;
 using Bloggie.Models.ViewModel;
 using Bloggie.Repositories;
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Bloggie.Controllers
 {
@@ -40,7 +39,8 @@ namespace Bloggie.Controllers
             return View(viewData);
         }
 
-        [HttpGet]
+
+        [Authorize, HttpGet]
         public IActionResult Add()
         {
             return View();

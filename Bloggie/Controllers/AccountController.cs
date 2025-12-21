@@ -6,12 +6,23 @@ namespace Bloggie.Controllers
 {
     public class AccountController : Controller
     {
+        #region Fields
         private readonly UserManager<IdentityUser> _userManager;
-        public AccountController(UserManager<IdentityUser> userManager)
+        private readonly SignInManager<IdentityUser> _signInManager;
+        #endregion
+
+        #region Constructor
+        public AccountController(
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager
+            )
         {
             _userManager = userManager;
+            _signInManager = signInManager;
         }
+        #endregion
 
+        #region Methods
         [HttpGet]
         public IActionResult Register()
         {
@@ -21,27 +32,59 @@ namespace Bloggie.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
-            // User 
+            // New user object
             var identityUser = new IdentityUser
             {
                 UserName = registerVM.Username,
                 Email = registerVM.Email,
             };
 
+            // Create a user using UserManager with a password
             var identityResult = await _userManager.CreateAsync(user: identityUser, password: registerVM.Password);
 
             if (identityResult.Succeeded)
             {
-                // Assign this user, a User role
+                // Assign this user a user role, and store the result in the database
                 var roleIdentityResult = await _userManager.AddToRoleAsync(user: identityUser, role: "User");
                 if (roleIdentityResult.Succeeded)
                 {
                     return RedirectToAction(nameof(Register));
                 }
-
             }
 
             return View();
         }
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginVM loginVM)
+        {
+            var signInResult = await _signInManager.PasswordSignInAsync(
+                userName: loginVM.Username,
+                password: loginVM.Password,
+                isPersistent: false,
+                lockoutOnFailure: false
+                );
+
+            if (signInResult != null && signInResult.Succeeded)
+            {
+                return RedirectToAction(controllerName: "Home", actionName: "Index");
+            }
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> Logout(LoginVM loginVM)
+        {
+
+            await _signInManager.SignOutAsync();
+
+
+            return RedirectToAction(controllerName: "Account", actionName: nameof(Register));
+        }
+        #endregion
     }
 }
+
