@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Bloggie.Models.ViewModel;
 using Bloggie.Repositories;
 using Bloggie.Models.Domain;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Bloggie.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminBlogPostsController : Controller
     {
         #region Fields

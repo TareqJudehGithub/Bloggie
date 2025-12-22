@@ -54,10 +54,15 @@ namespace Bloggie.Controllers
 
             return View();
         }
+
         [HttpGet]
-        public IActionResult Login()
+        public IActionResult Login(string ReturnUrl)
         {
-            return View();
+            var model = new LoginVM
+            {
+                ReturnUrl = ReturnUrl
+            };
+            return View(model);
         }
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM loginVM)
@@ -71,6 +76,11 @@ namespace Bloggie.Controllers
 
             if (signInResult != null && signInResult.Succeeded)
             {
+
+                if (!string.IsNullOrWhiteSpace(loginVM.ReturnUrl))
+                {
+                    return Redirect(loginVM.ReturnUrl);
+                }
                 return RedirectToAction(controllerName: "Home", actionName: "Index");
             }
             return View();
@@ -81,8 +91,16 @@ namespace Bloggie.Controllers
 
             await _signInManager.SignOutAsync();
 
-
             return RedirectToAction(controllerName: "Account", actionName: nameof(Register));
+        }
+
+        [HttpGet]
+        public IActionResult AccessDenied()
+        {
+            TempData["AlertType"] = "danger";
+            TempData["AlertMessage"] = "Access Denied! You need Admin privileges in order to access this page!";
+
+            return View();
         }
         #endregion
     }

@@ -10,6 +10,7 @@ using Bloggie.Repositories;
 
 namespace Bloggie.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminTagsController : Controller
     {
         #region Fields
@@ -39,8 +40,7 @@ namespace Bloggie.Controllers
             return View(viewData);
         }
 
-
-        [Authorize, HttpGet]
+        [HttpGet]
         public IActionResult Add()
         {
             return View();
@@ -122,6 +122,7 @@ namespace Bloggie.Controllers
             TempData["AlertMessage"] = "Error deleting tag!";
             return RedirectToAction(nameof(Index));
         }
+
         [HttpPost]
         [ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(Guid Id)
