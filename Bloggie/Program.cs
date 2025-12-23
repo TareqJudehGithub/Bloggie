@@ -23,15 +23,14 @@ options.UseSqlServer(authConnectionString)
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AuthDbContext>();
 
-
-
-// Injecting ITagRepository
+// Injecting repository services into the app:
+// ITagRepository
 builder.Services.AddScoped<ITagRepository, TagRepository>();
-
-// Injecting IBlogPostRepository
+// IBlogPostRepository
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
-
-// Injecting Cloudinary 
+// BlogPostLikesRepitory
+builder.Services.AddScoped<IBlogPostLikesRepository, BlogPostLikesRepository>();
+// Cloudinary 
 builder.Services.AddScoped<IImageRepository, CloudinaryImageRepository>();
 var app = builder.Build();
 

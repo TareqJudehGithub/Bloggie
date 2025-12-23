@@ -9,21 +9,32 @@ namespace Bloggie.Controllers
     {
         #region Fields
         private readonly IBlogPostRepository _blogPostRepository;
+        private readonly IBlogPostLikesRepository _blogPostLikesRepository;
         #endregion
+
         #region Constructor
-        public BlogsController(IBlogPostRepository blogPostRepository)
+        public BlogsController(
+            IBlogPostRepository blogPostRepository,
+            IBlogPostLikesRepository blogPostLikesRepository
+            )
         {
             _blogPostRepository = blogPostRepository;
+            _blogPostLikesRepository = blogPostLikesRepository;
         }
         #endregion
+
         #region Action Methods
         public async Task<IActionResult> Index(string urlHandle)
         {
             var modelData = await _blogPostRepository.GetByUrlHandle(urlHandle);
+            var viewData = new ReadOnlyBlogPostDetailsVM();
 
             if (modelData != null)
             {
-                var viewData = new ReadOnlyBlogPostRequestVM
+                // Total likes
+                var totalLikes = await _blogPostLikesRepository.GetTotalLikes(modelData.Id);
+
+                viewData = new ReadOnlyBlogPostDetailsVM
                 {
                     Id = modelData.Id,
                     Heading = modelData.Heading,
@@ -35,9 +46,11 @@ namespace Bloggie.Controllers
                     PublishedDate = modelData.PublishedDate,
                     Author = modelData.Author,
                     isVisible = modelData.isVisible,
-                    Tags = modelData.Tags
+                    Tags = modelData.Tags,
+                    TotalLikes = totalLikes
                 };
                 return View(viewData);
+
             }
             TempData["AlertType"] = "danger";
             TempData["AlertMessage"] = "Blog was not found! :(";

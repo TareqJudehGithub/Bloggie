@@ -1,5 +1,21 @@
 [
   {
+    "ContainingType": "Bloggie.Controllers.BlogPostLikeController",
+    "Method": "AddLike",
+    "RelativePath": "api/BlogPostLike/Add",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "addLikeRequestVM",
+        "Type": "Bloggie.Models.ViewModel.AddLikeRequestVM",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Bloggie.Controllers.ImagesController",
     "Method": "UploadAsync",
     "RelativePath": "api/Images",

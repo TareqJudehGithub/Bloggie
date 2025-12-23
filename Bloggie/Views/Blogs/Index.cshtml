@@ -1,42 +1,73 @@
-﻿@model ReadOnlyBlogPostRequestVM
+﻿@model ReadOnlyBlogPostDetailsVM
 
-@{ 
+@{
     ViewData["Title"] = Model.PageTitle;
 }
 
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-6">
+            @if (Model != null)
+            {
+                <h1>@Html.DisplayFor(modelItem => Model.Heading)</h1>
 
+                <div class="d-flex justify-content-between mb-3">
+                    <span class="text-secondary">@Html.DisplayFor(modelItem => Model.Author)</span>
+                    <span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
+                </div>
 
-    <div class="container my-5" >
-        <div class="row justify-content-center">
-            <div class="col-12 col-lg-6">
-                @if (Model != null)
-                {
-                    <h1>@Html.DisplayFor(modelItem => Model.Heading)</h1>
-                    
-                    <div class="d-flex justify-content-between mb-3">
-                        <span class="text-secondary">@Html.DisplayFor(modelItem => Model.Author)</span>
-                        <span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
-                    </div>
-                 
-                    <div class="d-flex mb-3">
-                        @foreach (var tag in @Model.Tags)
-                        {
-                            <p class="btn btn-secondary rounded-pill p-1 me-1">
-                                @Html.DisplayFor(modelItem => tag.Name)
-                            </p>
-                        }
-                    </div>
-                    <img
-                         class="img-fluid d-block mb-3"
-                         src="@Html.DisplayFor(modelItem => Model.FeaturedImgUrl)"
-                         alt="Blog post"/>
+                <div class="mb-3">
+                    @if (signInManager.IsSignedIn(User))
+                    {
+                        <a id="btnLike" role="button">
+                            <i class="bi bi-hand-thumbs-up"></i>
+                        </a>
+                    }
+                    <span>@Model.TotalLikes likes</span>
+                </div>
 
-                    <div class="mb-3 blog-details-content" >
-                        <p>
-                        @Html.Raw(Model.Content)
+                <div class="d-flex mb-3">
+                    @foreach (var tag in @Model.Tags)
+                    {
+                        <p class="btn btn-secondary rounded-pill p-1 me-1">
+                            @Html.DisplayFor(modelItem => tag.Name)
                         </p>
-                    </div>
+                    }
+                </div>
+                <img class="img-fluid d-block mb-3"
+                     src="@Html.DisplayFor(modelItem => Model.FeaturedImgUrl)"
+                     alt="Blog post" />
+
+                <div class="mb-3 blog-details-content">
+                    <p>
+                        @Html.Raw(Model.Content)
+                    </p>
+                </div>
             }
-            </div>
+
         </div>
     </div>
+</div>
+
+@section Scripts {
+    <script>
+        const btnLikebtnElement = document.getElementById("btnLike");
+
+        async function addLikeForBlog() {
+            fetch("/api/BlogPostLike/Add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "Application / JSON",
+                    "Accept": "*/*"
+                },
+                body: JSON.stringify({
+                    blogPostId: "@Model.Id",
+                    userId: "@userManager.GetUserId(User)"
+                })
+            })
+                    .then(console.log("Request finished successfully!"))
+        }
+
+        btnLikebtnElement.addEventListener("click", addLikeForBlog)
+    </script>
+}

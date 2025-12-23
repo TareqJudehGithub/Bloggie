@@ -1,5 +1,12 @@
-﻿@using Bloggie
+﻿@using Microsoft.AspNetCore.Identity
+
+@using Bloggie
 @using Bloggie.Models
 @using Bloggie.Models.Domain
 @using Bloggie.Models.ViewModel
+@using Bloggie.Data
+
+@inject SignInManager<IdentityUser> signInManager
+@inject UserManager<IdentityUser> userManager
+
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers

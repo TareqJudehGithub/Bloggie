@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Bloggie.Models.Domain;
 
-namespace Bloggie.Models.Domain
+namespace Bloggie.Models.ViewModel
 {
-    [Table(name: "BlogPosts", Schema = "dbo")]
-    public class BlogPost
+    public class ReadOnlyBlogPostDetailsVM
     {
         public Guid Id { get; set; }
         public string Heading { get; set; }
@@ -15,9 +14,7 @@ namespace Bloggie.Models.Domain
         public DateTime PublishedDate { get; set; }
         public string Author { get; set; }
         public bool isVisible { get; set; }
-
-        // Navigation properties - which tells EF Core that this is a related property.
         public ICollection<Tag> Tags { get; set; }
-        public ICollection<BlogPostLike> Likes { get; set; } // Total likes for a blog post
+        public int TotalLikes { get; set; }
     }
 }
