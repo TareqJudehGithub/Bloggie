@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "Bloggie.Controllers.BlogPostLikeController",
+    "Method": "GetTotalLikesForBlog",
+    "RelativePath": "api/BlogPostLike/{blogPostId}/totalLikes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "blogPostId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Bloggie.Controllers.BlogPostLikeController",
     "Method": "AddLike",
     "RelativePath": "api/BlogPostLike/Add",
     "HttpMethod": "POST",

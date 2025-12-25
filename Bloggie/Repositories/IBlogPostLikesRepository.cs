@@ -5,6 +5,8 @@ namespace Bloggie.Repositories
     public interface IBlogPostLikesRepository
     {
         Task<int> GetTotalLikes(Guid blogPostId);
+        Task<IEnumerable<BlogPostLike>> GetLikesForBlog(Guid blogPostId);
         Task<BlogPostLike> AddLikeForBlogPost(BlogPostLike blogPostLike);
+
     }
 }

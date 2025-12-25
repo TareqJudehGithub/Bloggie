@@ -7,6 +7,7 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-6">
+
             @if (Model != null)
             {
                 <h1>@Html.DisplayFor(modelItem => Model.Heading)</h1>
@@ -19,11 +20,21 @@
                 <div class="mb-3">
                     @if (signInManager.IsSignedIn(User))
                     {
+                        // If that user has already liked a blog post
+                        if (Model.blogLiked)
+                        {
+                            <a role="button">
+                                <i class="bi bi-hand-thumbs-up-fill"></i>
+                            </a>
+                        }
+                        else
+                    {
                         <a id="btnLike" role="button">
                             <i class="bi bi-hand-thumbs-up"></i>
                         </a>
                     }
-                    <span>@Model.TotalLikes likes</span>
+                    }
+                    <span id="totalLikes">@Model.TotalLikes</span> likes
                 </div>
 
                 <div class="d-flex mb-3">
@@ -52,12 +63,26 @@
 @section Scripts {
     <script>
         const btnLikebtnElement = document.getElementById("btnLike");
+        const totalLikeElement = document.getElementById("totalLikes");
+
+        async function getTotalLikes() {
+            fetch("api/BlogPostLike/@Model.Id/totalLikes", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "Application/Json",
+                    "Accept": "*/*"
+                }
+                // GET methods do no requie a body
+            })
+                .then(data => data.json())
+                .then(result => totalLikeElement.innerHTML = result);
+        }
 
         async function addLikeForBlog() {
             fetch("/api/BlogPostLike/Add", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "Application / JSON",
+                    "Content-Type": "Application/JSON",
                     "Accept": "*/*"
                 },
                 body: JSON.stringify({
@@ -65,9 +90,18 @@
                     userId: "@userManager.GetUserId(User)"
                 })
             })
-                    .then(console.log("Request finished successfully!"))
+                // Change the like icon from hollow to filled
+                .then(() => {
+                    btnLikebtnElement.innerHTML =
+                        '<i class="bi bi-hand-thumbs-up-fill"></i>';
+                         
+                    // Deny the user the ability to use the Like button 
+                    btnLikebtnElement.removeEventListener("click", addLikeForBlog);
+                    // Call GetTotalLikesForBlog action method
+                    getTotalLikes();
+                });
         }
 
-        btnLikebtnElement.addEventListener("click", addLikeForBlog)
+        btnLikebtnElement.addEventListener("click", addLikeForBlog);
     </script>
 }
