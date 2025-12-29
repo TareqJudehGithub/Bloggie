@@ -18,5 +18,6 @@ namespace Bloggie.Models.ViewModel
         public int TotalLikes { get; set; }
         public bool blogLiked { get; set; }
         public string CommentDescription { get; set; }
+        public IEnumerable<BlogCommentVM> Comments { get; set; }
     }
 }

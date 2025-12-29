@@ -28,11 +28,11 @@
                             </a>
                         }
                         else
-                    {
-                        <a id="btnLike" role="button">
-                            <i class="bi bi-hand-thumbs-up"></i>
-                        </a>
-                    }
+                        {
+                            <a id="btnLike" role="button">
+                                <i class="bi bi-hand-thumbs-up"></i>
+                            </a>
+                        }
                     }
                     <span id="totalLikes">@Model.TotalLikes</span> likes
                 </div>
@@ -57,8 +57,8 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 class="mb-3">Comments</h5>
-                    @*@if (signInManager.IsSignedIn(User))
-                    {*@
+                        @*@if (signInManager.IsSignedIn(User))
+                            {*@
                         <form method="post">
                             <div class="mb-3">
                                 <label class="form-label">Comment Description</label>
@@ -66,14 +66,30 @@
                             </div>
                             <div class="mb-3">
                                 <button class="btn btn-dark" type="submit">Post</button>
-                                <input type="hidden" asp-for="Id"/>
+                                <input type="hidden" asp-for="Id" />
                                 @*<input type="hidden" asp-for="UrlHandle"/>*@
                             </div>
                         </form>
-                    @*}*@
+                        @*}*@
                     </div>
                     <div class="card-body">
-
+                        @if (Model.Comments != null && Model.Comments.Any())
+                        {
+                            @foreach (var comment in Model.Comments)
+                            {
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div>
+                                            @comment.Description
+                                        </div>
+                                        <div class="d-flex justify-content-between">
+                                            <span class="text-secondary fs-6">@comment.Username</span>
+                                            <span class="text-secondary fs-6">@comment.DateAdded.ToShortDateString()</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
                     </div>
                 </div>
             }
@@ -116,8 +132,8 @@
                 .then(() => {
                     btnLikebtnElement.innerHTML =
                         '<i class="bi bi-hand-thumbs-up-fill"></i>';
-                         
-                    // Deny the user the ability to use the Like button 
+
+                    // Deny the user the ability to use the Like button
                     btnLikebtnElement.removeEventListener("click", addLikeForBlog);
                     // Call GetTotalLikesForBlog action method
                     getTotalLikes();

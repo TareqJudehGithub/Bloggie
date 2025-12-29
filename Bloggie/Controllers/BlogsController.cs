@@ -65,6 +65,22 @@ namespace Bloggie.Controllers
 
                     }
                 }
+                // Get all comments for this blog post
+                var blogCommentsDomainModel = await _blogPostCommentRepository
+                    .GetCommentsByBlogIdAsync(modelData.Id);
+
+                var blogCommentsViewModel = new List<BlogCommentVM>();
+                foreach (var comment in blogCommentsDomainModel)
+                {
+                    blogCommentsViewModel.Add(new BlogCommentVM
+                    {
+                        Description = comment.Description,
+                        DateAdded = comment.DateAdded,
+                        Username = (await _userManager
+                        .FindByIdAsync(comment.UserId.ToString())).UserName
+                    });
+                }
+
                 viewData = new ReadOnlyBlogPostDetailsVM
                 {
                     Id = modelData.Id,
@@ -79,7 +95,8 @@ namespace Bloggie.Controllers
                     isVisible = modelData.isVisible,
                     Tags = modelData.Tags,
                     TotalLikes = totalLikes,
-                    blogLiked = blogLiked
+                    blogLiked = blogLiked,
+                    Comments = blogCommentsViewModel
                 };
                 return View(viewData);
 
@@ -107,8 +124,10 @@ namespace Bloggie.Controllers
                 await _blogPostCommentRepository.AddAsync(model);
 
                 return RedirectToAction(
-                    controllerName: "Home",
-                    actionName: nameof(Index));
+                    actionName: nameof(Index),
+                    controllerName: "Blogs",
+                    new { urlHandle = viewModel.UrlHandle }
+                    );
             }
             else
             {
@@ -116,8 +135,6 @@ namespace Bloggie.Controllers
                 TempData["AlertMessage"] = "Please log in first to your account.";
                 return Forbid();
             }
-
-
         }
         #endregion
     }
