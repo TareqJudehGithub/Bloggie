@@ -1,5 +1,7 @@
-﻿using Bloggie.Models.ViewModel;
+﻿using Bloggie.Models.Domain;
+using Bloggie.Models.ViewModel;
 using Bloggie.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,28 +10,34 @@ namespace Bloggie.Controllers
     public class BlogsController : Controller
     {
         #region Fields
-        private readonly IBlogPostRepository _blogPostRepository;
-        private readonly IBlogPostLikesRepository _blogPostLikesRepository;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+
+        private readonly IBlogPostRepository _blogPostRepository;
+        private readonly IBlogPostLikesRepository _blogPostLikesRepository;
+        private readonly IBlogPostCommentRepository _blogPostCommentRepository;
+
         #endregion
 
         #region Constructor
         public BlogsController(
+            SignInManager<IdentityUser> signInManager,
+            UserManager<IdentityUser> userManager,
             IBlogPostRepository blogPostRepository,
             IBlogPostLikesRepository blogPostLikesRepository,
-            SignInManager<IdentityUser> signInManager,
-            UserManager<IdentityUser> userManager
+            IBlogPostCommentRepository blogPostCommentRepository
             )
         {
-            _blogPostRepository = blogPostRepository;
-            _blogPostLikesRepository = blogPostLikesRepository;
             _signInManager = signInManager;
             _userManager = userManager;
+            _blogPostRepository = blogPostRepository;
+            _blogPostLikesRepository = blogPostLikesRepository;
+            _blogPostCommentRepository = blogPostCommentRepository;
         }
         #endregion
 
         #region Action Methods
+        [HttpGet]
         public async Task<IActionResult> Index(string urlHandle)
         {
 
@@ -80,6 +88,36 @@ namespace Bloggie.Controllers
             TempData["AlertMessage"] = "Blog was not found! :(";
 
             return null;
+        }
+
+        [Authorize(Roles = "User")]
+        [HttpPost]
+        public async Task<IActionResult> Index(ReadOnlyBlogPostDetailsVM viewModel)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                // Convert view model to domain model
+                var model = new BlogPostComment
+                {
+                    BlogPostId = viewModel.Id,
+                    Description = viewModel.CommentDescription,
+                    UserId = Guid.Parse(_userManager.GetUserId(User)),
+                    DateAdded = DateTime.Now
+                };
+                await _blogPostCommentRepository.AddAsync(model);
+
+                return RedirectToAction(
+                    controllerName: "Home",
+                    actionName: nameof(Index));
+            }
+            else
+            {
+                TempData["AlertType"] = "warning";
+                TempData["AlertMessage"] = "Please log in first to your account.";
+                return Forbid();
+            }
+
+
         }
         #endregion
     }

@@ -4,6 +4,7 @@ using Bloggie.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bloggie.Migrations
 {
     [DbContext(typeof(BloggieDbContext))]
-    partial class BloggieDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251229144647_Adding Comments table")]
+    partial class AddingCommentstable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,7 +106,7 @@ namespace Bloggie.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Comments", "dbo");
+                    b.ToTable("Comments", "dob");
                 });
 
             modelBuilder.Entity("Bloggie.Models.Domain.BlogPostLike", b =>

@@ -30,6 +30,8 @@ builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 // BlogPostLikesRepitory
 builder.Services.AddScoped<IBlogPostLikesRepository, BlogPostLikesRepository>();
+//  BlogPostCommentRepository
+builder.Services.AddScoped<IBlogPostCommentRepository, BlogPostCommentRepository>();
 // Cloudinary 
 builder.Services.AddScoped<IImageRepository, CloudinaryImageRepository>();
 var app = builder.Build();
