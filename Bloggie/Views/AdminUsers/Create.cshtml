@@ -1,0 +1,32 @@
+﻿@model AddUserRequestVM
+
+<div class="bg-secondary bg-opacity-10 py-2">
+    <div class="container">
+        <h1>Add New BlogPost - Admin Functionality</h1>
+    </div>
+</div>
+
+<div class="container py-5">
+    <form class="" method="post">
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Username">Username</label>
+            <input id="username" class="form-control" type="text" asp-for="Username" placeholder="Enter username" autofocus />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" asp-for="Password">Username</label>
+            <input id="username" class="form-control" type="password" asp-for="Password" placeholder="Enter a password"  />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" asp-for="Email">Email Address</label>
+            <input id="pageTitle" class="form-control" type="email" asp-for="Email" placeholder="example@email.com" />
+        </div>
+
+        <div class="mb-3">
+            <button class="btn btn-dark" type="submit">Add</button>
+            <a class="btn btn-secondary" asp-controller="AdminUsers" asp-action="Index">Cancel</a>
+        </div>
+
+    </form>
+    </div>

@@ -1,0 +1,41 @@
+﻿@model UsersListVM
+
+    <div class="bg-secondary bg-opacity-10 py-2 mb-5">
+        <div class="container">
+            <h1>Users - Admin functionality</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr>
+                <th>Id </th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            @foreach(var item in @Model.Users)
+            {
+            <tr>
+                <td>@Html.DisplayFor(viewModel => item.Id)</td>
+                <td>@Html.DisplayFor(viewModel => item.Username)</td>
+                <td>@Html.DisplayFor(viewModel => item.Email)</td>
+                <td>
+                    <a class="link-secondary"
+                       asp-controller="AdminUsers"
+                       asp-action="Update"
+                       asp-route-id="@item.Id">Edit</a>
+                    <a class="link-danger"
+                       asp-controller="AdminUsers"
+                       asp-action="Delete"
+                       asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>

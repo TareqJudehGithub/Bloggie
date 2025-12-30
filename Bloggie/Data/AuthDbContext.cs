@@ -53,7 +53,6 @@ namespace Bloggie.Data
             // Inserting roles created using builder, for seeding and insertion into the database when using migration.
             builder.Entity<IdentityRole>().HasData(roles);
 
-
             // Seed/create a SuperAdminUser
             // 1. Create an Identity superAdminUser
             var superAdminId = "e6a5af26-87be-427b-8a74-0cb43a2497b1";
