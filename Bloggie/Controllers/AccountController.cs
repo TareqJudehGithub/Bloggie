@@ -36,9 +36,9 @@ namespace Bloggie.Controllers
             var identityUser = new IdentityUser
             {
                 UserName = registerVM.Username,
-                Email = registerVM.Email,
-            };
+                Email = registerVM.Email
 
+            };
             // Create a user using UserManager with a password
             var identityResult = await _userManager.CreateAsync(user: identityUser, password: registerVM.Password);
 
@@ -91,7 +91,7 @@ namespace Bloggie.Controllers
 
             await _signInManager.SignOutAsync();
 
-            return RedirectToAction(controllerName: "Account", actionName: nameof(Register));
+            return RedirectToAction(controllerName: "Account", actionName: nameof(Login));
         }
 
         [HttpGet]

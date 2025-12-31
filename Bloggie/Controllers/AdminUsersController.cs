@@ -12,11 +12,16 @@ namespace Bloggie.Controllers
     public class AdminUsersController : Controller
     {
         #region Fields
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserRepository _userRepository;
         #endregion
         #region Constructors
-        public AdminUsersController(IUserRepository userRepository)
+        public AdminUsersController(
+            UserManager<IdentityUser> userManager,
+            IUserRepository userRepository
+            )
         {
+            _userManager = userManager;
             _userRepository = userRepository;
         }
         #endregion
@@ -59,6 +64,51 @@ namespace Bloggie.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> Index(UsersListVM viewModel)
+        {
+            var identityUser = new IdentityUser
+            {
+                UserName = viewModel.Username,
+                Email = viewModel.Email
+            };
+            // Create user in the database
+            var identityResult = await _userManager.CreateAsync(user: identityUser, password: viewModel.Password);
+
+            if (identityResult is not null)
+            {
+                if (identityResult.Succeeded)
+                {
+                    // Assign role "User" to the new user
+                    List<string> roles = new List<string>();
+
+                    if (viewModel.IsUser)
+                    {
+                        roles.Add("User");
+                    }
+                    //var roles = new List<string> { "User" };
+
+                    //  Check if user is admin
+                    if (viewModel.IsAdmin)
+                    {
+                        roles.Add("Admin");
+                    }
+                    // Assign roles create (the roles list) to the new user
+                    identityResult = await _userManager.AddToRolesAsync(user: identityUser, roles: roles);
+                    TempData["AlertType"] = "success";
+                    TempData["AlertMessage"] = $"User {viewModel.Username} was successfully created.";
+                    return RedirectToAction(controllerName: "AdminUsers", actionName: nameof(Index));
+                }
+            }
+
+
+            TempData["AlertType"] = "danger";
+            TempData["AlertMessage"] = "Error creating new user.";
+            return View();
+        }
+
+
+        // For the Add view - alt creating new users
         [HttpPost]
         public async Task<IActionResult> Create(AddUserRequestVM viewModel)
         {
