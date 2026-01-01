@@ -34,14 +34,19 @@
                     <td>@Html.DisplayFor(viewModel => item.Email)</td>
 
                     <td>
-                        <a class="link-secondary"
+                        @*<a class="link-secondary"
                            asp-controller="AdminUsers"
                            asp-action="Update"
-                           asp-route-id="@item.Id">Edit</a>
-                        <a class="link-danger"
-                           asp-controller="AdminUsers"
-                           asp-action="Delete"
-                           asp-route-id="@item.Id">Delete</a>
+                           asp-route-id="@item.Id">Edit</a>*@
+                      
+                        <form method="post">
+                            <button class="btn link-danger"
+                               asp-controller="AdminUsers"
+                               asp-action="Delete"
+                               asp-route-id="@item.Id"
+                               type="submit"
+                               >Delete</button>
+                        </form>
                     </td>
                 </tr>
             }

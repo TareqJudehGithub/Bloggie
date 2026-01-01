@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-using Bloggie.Models.ViewModel;
+﻿using Bloggie.Models.ViewModel;
 using Bloggie.Repositories;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 
 
 namespace Bloggie.Controllers
@@ -123,6 +125,43 @@ namespace Bloggie.Controllers
             await _userRepository.AddAsync(model);
 
             return RedirectToAction(actionName: nameof(Index), controllerName: "AdminUsers");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+
+            var user = await _userManager.FindByIdAsync(id.ToString());
+
+            if (user is not null)
+            {
+
+                // Get roles for this user
+                var roles = await _userManager.GetRolesAsync(user);
+
+                // Check if the logged user is a manger, and prevent him/her from deleting other users
+                // with Manager roles.
+                if (!User.IsInRole("SuperAdmin") && User.IsInRole("Admin"))
+                {
+                    if (roles.Contains("Admin"))
+                    {
+                        TempData["AlertType"] = "danger";
+                        TempData["AlertMessage"] = "Only a Super Admin can delete users with a Manager role.";
+
+                        ModelState.AddModelError(key: "", errorMessage: "Cannot delete a user with a Manager role.");
+                        return RedirectToAction(controllerName: "AdminUsers", actionName: nameof(Index));
+                    }
+                }
+                // Delete the found user
+                await _userManager.DeleteAsync(user);
+                TempData["AlertType"] = "success";
+                TempData["AlertMessage"] = $"{user.UserName} was successfully deleted.";
+                return RedirectToAction(controllerName: "AdminUsers", actionName: nameof(Index));
+            }
+            // In case the user was not found, display a message and redirect back to the users list.
+            TempData["AlertType"] = "danger";
+            TempData["AlertMessage"] = $"{user.UserName} was not found.";
+            return RedirectToAction(controllerName: "AdminUsers", actionName: nameof(Index));
         }
         #endregion
     }
