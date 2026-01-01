@@ -32,26 +32,30 @@ namespace Bloggie.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
-            // New user object
-            var identityUser = new IdentityUser
+            if (ModelState.IsValid)
             {
-                UserName = registerVM.Username,
-                Email = registerVM.Email
-
-            };
-            // Create a user using UserManager with a password
-            var identityResult = await _userManager.CreateAsync(user: identityUser, password: registerVM.Password);
-
-            if (identityResult.Succeeded)
-            {
-                // Assign this user a user role, and store the result in the database
-                var roleIdentityResult = await _userManager.AddToRoleAsync(user: identityUser, role: "User");
-                if (roleIdentityResult.Succeeded)
+                // New user object
+                var identityUser = new IdentityUser
                 {
-                    return RedirectToAction(nameof(Register));
+                    UserName = registerVM.Username,
+                    Email = registerVM.Email
+                };
+                // Create a user using UserManager with a password
+                var identityResult = await _userManager.CreateAsync(user: identityUser, password: registerVM.Password);
+
+                if (identityResult.Succeeded)
+                {
+                    // Assign this user a user role, and store the result in the database
+                    var roleIdentityResult = await _userManager.AddToRoleAsync(user: identityUser, role: "User");
+                    if (roleIdentityResult.Succeeded)
+                    {
+                        TempData["AlertType"] = "success";
+
+                        return RedirectToAction(nameof(Register));
+                    }
                 }
             }
-
+            // If the ModelState is not valid
             return View();
         }
 
@@ -67,21 +71,24 @@ namespace Bloggie.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginVM loginVM)
         {
-            var signInResult = await _signInManager.PasswordSignInAsync(
-                userName: loginVM.Username,
-                password: loginVM.Password,
-                isPersistent: false,
-                lockoutOnFailure: false
-                );
-
-            if (signInResult != null && signInResult.Succeeded)
+            if (ModelState.IsValid)
             {
+                var signInResult = await _signInManager.PasswordSignInAsync(
+                    userName: loginVM.Username,
+                    password: loginVM.Password,
+                    isPersistent: false,
+                    lockoutOnFailure: false
+                    );
 
-                if (!string.IsNullOrWhiteSpace(loginVM.ReturnUrl))
+                if (signInResult != null && signInResult.Succeeded)
                 {
-                    return Redirect(loginVM.ReturnUrl);
+
+                    if (!string.IsNullOrWhiteSpace(loginVM.ReturnUrl))
+                    {
+                        return Redirect(loginVM.ReturnUrl);
+                    }
+                    return RedirectToAction(controllerName: "Home", actionName: "Index");
                 }
-                return RedirectToAction(controllerName: "Home", actionName: "Index");
             }
             return View();
         }

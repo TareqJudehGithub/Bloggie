@@ -28,7 +28,7 @@ namespace Bloggie.Repositories
         }
         public async Task<IEnumerable<BlogPostComment>> GetCommentsByBlogIdAsync(Guid blogPostId)
         {
-            // Gets all comments for a blog post
+            // Gets all comments for a blog post        
             return await _bloggieDbContext.Comments
                 .Where(q => q.BlogPostId == blogPostId)
                 .ToListAsync();

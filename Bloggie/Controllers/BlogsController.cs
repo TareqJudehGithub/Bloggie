@@ -66,19 +66,23 @@ namespace Bloggie.Controllers
                     }
                 }
                 // Get all comments for this blog post
+
                 var blogCommentsDomainModel = await _blogPostCommentRepository
                     .GetCommentsByBlogIdAsync(modelData.Id);
 
                 var blogCommentsViewModel = new List<BlogCommentVM>();
                 foreach (var comment in blogCommentsDomainModel)
                 {
-                    blogCommentsViewModel.Add(new BlogCommentVM
+                    if (blogCommentsDomainModel is not null)
                     {
-                        Description = comment.Description,
-                        DateAdded = comment.DateAdded,
-                        Username = (await _userManager
-                        .FindByIdAsync(comment.UserId.ToString())).UserName
-                    });
+                        blogCommentsViewModel.Add(new BlogCommentVM
+                        {
+                            Description = comment.Description,
+                            DateAdded = comment.DateAdded,
+                            Username = (await _userManager
+                            .FindByIdAsync(comment.UserId.ToString())).UserName
+                        });
+                    }
                 }
 
                 viewData = new ReadOnlyBlogPostDetailsVM

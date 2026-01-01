@@ -35,6 +35,14 @@ builder.Services.AddScoped<IBlogPostCommentRepository, BlogPostCommentRepository
 // UserRepository
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
+
+// Identity user password configuration
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredUniqueChars = 1;
+});
 // Cloudinary 
 builder.Services.AddScoped<IImageRepository, CloudinaryImageRepository>();
 var app = builder.Build();
