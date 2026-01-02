@@ -8,14 +8,23 @@
 
     <div class="container py-5" >
         <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="mb-3">
-                <label class="form-label" asp-for="Name">Name</label>
+                <label
+                       asp-for="Name"
+                       class="form-label" 
+                       >@Html.DisplayNameFor(model => model.Name)</label>
                 <input class="form-control" type="text"  asp-for="Name" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label class="form-label" asp-for="DisplayName">DisplayName</label>
+                <label
+                       asp-for="DisplayName"
+                       class="form-label" 
+                       >@Html.DisplayNameFor(model => model.DisplayName)</label>
                 <input class="form-control" type="text" asp-for="DisplayName" />
+                <span asp-validation-for="DisplayName" class="text-danger"></span>
             </div>
 
             <div class="mb-3">

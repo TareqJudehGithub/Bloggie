@@ -9,8 +9,6 @@ namespace Bloggie.Models.ViewModel
 
         [Required]
         public string Password { get; set; }
-
-        [Required]
         public string? ReturnUrl { get; set; }
     }
 }

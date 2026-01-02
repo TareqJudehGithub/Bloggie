@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Bloggie.Models.Domain;
 using Bloggie.Models.ViewModel;
 using Bloggie.Repositories;
-
+using Microsoft.IdentityModel.Tokens;
 
 namespace Bloggie.Controllers
 {
@@ -48,15 +48,21 @@ namespace Bloggie.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(AddTagRequestVM addTagRequest)
         {
-            var model = new Tag
-            {
-                Name = addTagRequest.Name,
-                DisplayName = addTagRequest.DisplayName
-            };
-            await _tagRepository.Add(model);
-            return RedirectToAction(nameof(Index));
-        }
+            // Adding a custom validation
+            ValidateAddTagRequest(addTagRequest);
 
+            if (ModelState.IsValid)
+            {
+                var model = new Tag
+                {
+                    Name = addTagRequest.Name,
+                    DisplayName = addTagRequest.DisplayName
+                };
+                await _tagRepository.Add(model);
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -138,8 +144,24 @@ namespace Bloggie.Controllers
             TempData["AlertMessage"] = "Error deleting tag!";
             return RedirectToAction(nameof(Index));
         }
+
+        // Custom Validation methods
+        private void ValidateAddTagRequest(AddTagRequestVM addTagRequest)
+        {
+            if (addTagRequest.Name is not null && addTagRequest.DisplayName is not null)
+            {
+                if (addTagRequest.Name == addTagRequest.DisplayName)
+                {
+                    ModelState.AddModelError(
+                        key: "DisplayName",
+                        errorMessage: "Tag Code cannot be the same as Tag Description.");
+                }
+            }
+        }
+
     }
+
+
     #endregion
 }
-
 
