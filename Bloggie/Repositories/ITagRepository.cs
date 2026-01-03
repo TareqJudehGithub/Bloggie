@@ -5,7 +5,8 @@ namespace Bloggie.Repositories
 {
     public interface ITagRepository
     {
-        public Task<IEnumerable<Tag>> GetAll();
+        public Task<IEnumerable<Tag>> GetAll(
+            string? searchString = null);
         public Task<Tag?> Get(Guid Id);
         public Task<Tag> Add(Tag model);
         public Task<Tag?> Edit(Tag model);

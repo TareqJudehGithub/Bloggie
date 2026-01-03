@@ -1,52 +1,77 @@
 ﻿@model IEnumerable<ReadOnlyTagRequestVM>
 
-    <div class="bg-secondary bg-opacity-10 py-2">
-        <div class="container">
-            <h1>Show all Tags - Admin Functionality</h1>
+<div class="py-2 mb-5 mt-2">
+    <div class="container">
+        <h2>Show all Tags - Admin Functionality</h2>
+    </div>
+</div>
+
+<form 
+      asp-controller="AdminTags"
+      asp-action="Index"
+      
+      method="get"
+      >
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col col-md-3 d-flex">
+                <!--name="searchQuery" is what filters down the results-->
+                <input class="form-control" type="text" name="searchQuery" placeholder="Search tags..." value="@ViewBag.SearchQuery"/>
+                <button class="btn btn-secondary ms-3">Search</button>
+            </div>
         </div>
     </div>
+</form>
 
-    <div class="container py-5">
-        @if (Model != null && Model.Any())
-            {
-                <table class="table">
-                    <thead>
-                        <tr>
-                            @*<th>Id</th>*@
-                            <th>Name</th>
-                        <th>Display Name</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var tag in Model)
+
+<div class="container">
+    @if (Model != null && Model.Any())
+    {
+        <table class="table">
+            <thead>
+                <tr>
+                    @*<th>Id</th>*@
+                    <th>
+                        @Html.DisplayNameFor(item => item.Name)
+                        <span class="btn btn-light">
+                            <span>
+                                <i class="bi bi-arrow-up"></i>
+                            </span>
+                        </span>
+
+                    </th>
+                    <th>@Html.DisplayNameFor(item => item.DisplayName)</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var tag in Model)
                 {
-                        <tr>
-                            @*<td>@tag.Id</td>*@
-                            <td>@tag.Name</td>
-                            <td>@tag.DisplayName</td>
-                            <td>
-                                <a 
-                                        class="btn btn-warning" 
-                                        asp-controller="adminTags"
-                                        asp-action="Edit"
-                                        asp-route-id="@tag.Id"
-                                   >Edit
-                                </a>
-                                <a class="btn btn-danger"
-                                        asp-controller="adminTags"
-                                        asp-action="Delete"
-                                        asp-route-id="@tag.Id"
-                                   >Delete</a>
-                            </td>
-                        </tr>
+                    <tr>
+                        @*<td>@tag.Id</td>*@                        
+                        <td>@Html.DisplayFor(model => tag.Name)</td>
+                        <td>@Html.DisplayFor(model => tag.DisplayName)</td>                        
+                        <td>
+
+                            <a class="btn btn-warning"
+                               asp-controller="adminTags"
+                               asp-action="Edit"
+                               asp-route-id="@tag.Id">
+                                Edit
+                            </a>
+                            <a class="btn btn-danger"
+                               asp-controller="adminTags"
+                               asp-action="Delete"
+                               asp-route-id="@tag.Id">Delete</a>
+                        </td>
+                    </tr>
                 }
-                    </tbody>
-                </table>
-            }
-        else
-            {
-                <p>No tags found!</p>
-            }
-    </div>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No tags found!</p>
+    }
+</div>
 

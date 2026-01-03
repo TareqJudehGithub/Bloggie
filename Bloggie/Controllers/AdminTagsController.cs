@@ -26,9 +26,12 @@ namespace Bloggie.Controllers
 
         #region Action Methods
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchQuery)
         {
-            var domainModel = await _tagRepository.GetAll();
+            var domainModel = await _tagRepository.GetAll(searchQuery);
+
+            // Save search state
+            ViewBag.SearchQuery = searchQuery;
             // Convert to View Model data
             var viewData = domainModel.Select(q => new ReadOnlyTagRequestVM
             {
@@ -145,6 +148,7 @@ namespace Bloggie.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
         // Custom Validation methods
         private void ValidateAddTagRequest(AddTagRequestVM addTagRequest)
         {
@@ -160,8 +164,6 @@ namespace Bloggie.Controllers
         }
 
     }
-
-
     #endregion
 }
 

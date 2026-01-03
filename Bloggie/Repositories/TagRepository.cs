@@ -9,42 +9,60 @@ namespace Bloggie.Repositories
     public class TagRepository : ITagRepository
     {
         #region Fields
-        private readonly BloggieDbContext _dbContext;
+        private readonly BloggieDbContext _blogieDbContext;
         #endregion
         #region Constructor
         // Constructor injection
-        public TagRepository(BloggieDbContext dbContext)
+        public TagRepository(BloggieDbContext bloggieDbContext)
         {
-            _dbContext = dbContext;
+            _blogieDbContext = bloggieDbContext;
         }
         #endregion
 
         #region methods  
-        public async Task<IEnumerable<Tag>> GetAll()
+        public async Task<IEnumerable<Tag>> GetAll(string? searchQuery)
         {
-            var domainModel = await _dbContext.Tags.ToListAsync();
+
+            // var domainModel = await _blogieDbContext.Tags.ToListAsync();
+            // return domainModel;
 
 
-            return domainModel;
+            // Turn Tags to a list of items that we can query - Search
+            var query = _blogieDbContext.Tags.AsQueryable();
+
+            // Filtering
+            if (string.IsNullOrWhiteSpace(searchQuery) == false)
+            {
+                // If the search input value matches any of Name of DisplayName, then return that  result back.
+                query = query.Where(q => q.Name.Contains(searchQuery) ||
+                q.DisplayName.Contains(searchQuery)
+
+                );
+            }
+            // Sorting 
+
+            // Pagination
+            return await query.ToListAsync();
+
         }
         public async Task<Tag?> Get(Guid id)
         {
 
-            var tag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == id);
+            var tag = await _blogieDbContext.Tags.FirstOrDefaultAsync(q => q.Id == id);
             return tag;
         }
         public async Task<Tag> Add(Tag tag)
         {
 
-            await _dbContext.Tags.AddAsync(tag);
-            await _dbContext.SaveChangesAsync();
+            await _blogieDbContext.Tags.AddAsync(tag);
+            await _blogieDbContext.SaveChangesAsync();
 
             return tag;
         }
         public async Task<Tag?> Edit(Tag tag)
         {
             // Fetch the record to be updated
-            var existingTag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == tag.Id);
+            var existingTag = await _blogieDbContext.Tags.FirstOrDefaultAsync(q => q.Id == tag.Id);
 
             // Check for null and update
             if (existingTag != null)
@@ -55,7 +73,7 @@ namespace Bloggie.Repositories
                 // Or _dbContext.Tags.Update(existingTag);
 
                 // And save to the database
-                await _dbContext.SaveChangesAsync();
+                await _blogieDbContext.SaveChangesAsync();
 
                 // Back to the controller now
                 return existingTag;
@@ -65,12 +83,12 @@ namespace Bloggie.Repositories
 
         public async Task<Tag?> Delete(Guid Id)
         {
-            var tag = await _dbContext.Tags.FirstOrDefaultAsync(q => q.Id == Id);
+            var tag = await _blogieDbContext.Tags.FirstOrDefaultAsync(q => q.Id == Id);
 
             if (tag != null)
             {
-                _dbContext.Remove(tag);
-                await _dbContext.SaveChangesAsync();
+                _blogieDbContext.Remove(tag);
+                await _blogieDbContext.SaveChangesAsync();
                 return tag;
             }
 
