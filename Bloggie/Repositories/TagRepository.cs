@@ -3,66 +3,105 @@
 using Bloggie.Models.Domain;
 using Bloggie.Models.ViewModel;
 using Bloggie.Data;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Bloggie.Repositories
 {
     public class TagRepository : ITagRepository
     {
         #region Fields
-        private readonly BloggieDbContext _blogieDbContext;
+        private readonly BloggieDbContext _bloggieDbContext;
         #endregion
         #region Constructor
         // Constructor injection
         public TagRepository(BloggieDbContext bloggieDbContext)
         {
-            _blogieDbContext = bloggieDbContext;
+            _bloggieDbContext = bloggieDbContext;
         }
         #endregion
 
         #region methods  
-        public async Task<IEnumerable<Tag>> GetAll(string? searchQuery)
+        public async Task<IEnumerable<Tag>> GetAll(
+            string? searchQuery,
+            string? sortBy,
+            string sortDirection
+            )
         {
-
-            // var domainModel = await _blogieDbContext.Tags.ToListAsync();
-            // return domainModel;
-
-
             // Turn Tags to a list of items that we can query - Search
-            var query = _blogieDbContext.Tags.AsQueryable();
+            var query = _bloggieDbContext.Tags.AsQueryable();
+
+            query = query.OrderBy(q => q.Name);
 
             // Filtering
-            if (string.IsNullOrWhiteSpace(searchQuery) == false)
+            // Use input value in searchQuery 
+            if (!string.IsNullOrWhiteSpace(searchQuery))
             {
                 // If the search input value matches any of Name of DisplayName, then return that  result back.
                 query = query.Where(q => q.Name.Contains(searchQuery) ||
                 q.DisplayName.Contains(searchQuery)
-
                 );
             }
+
             // Sorting 
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                // Desc order - Check if sortDirection value = "Desc"
+                var isDesc = string.Equals(sortDirection, "Desc", StringComparison.OrdinalIgnoreCase);
+
+                var isAsc = string.Equals(sortDirection, "Asc", StringComparison.OrdinalIgnoreCase);
+
+                // Check if sorting was by Name/Tag Code column
+                if (string.Equals(sortBy, "Name", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDesc
+                        ?
+                        query.OrderByDescending(q => q.Name)
+                        : query.OrderBy(q => q.Name);
+                }
+
+                // Check if sorting was by DisplayName/Tag Description column
+                if (string.Equals(sortBy, "DisplayName", StringComparison.OrdinalIgnoreCase))
+                {
+                    if (isDesc)
+                    {
+                        query = query.OrderByDescending(q => q.DisplayName);
+                        sortDirection = "Asc";
+                    }
+                    else
+                    {
+                        query = query.OrderBy(q => q.DisplayName);
+                        sortDirection = "Desc";
+                    }
+                }
+            }
 
             // Pagination
+
             return await query.ToListAsync();
 
+
+            // Code before implementing Search and Sort
+            // var domainModel = await _blogieDbContext.Tags.ToListAsync();
+            // return domainModel;
         }
         public async Task<Tag?> Get(Guid id)
         {
 
-            var tag = await _blogieDbContext.Tags.FirstOrDefaultAsync(q => q.Id == id);
+            var tag = await _bloggieDbContext.Tags.FirstOrDefaultAsync(q => q.Id == id);
             return tag;
         }
         public async Task<Tag> Add(Tag tag)
         {
 
-            await _blogieDbContext.Tags.AddAsync(tag);
-            await _blogieDbContext.SaveChangesAsync();
+            await _bloggieDbContext.Tags.AddAsync(tag);
+            await _bloggieDbContext.SaveChangesAsync();
 
             return tag;
         }
         public async Task<Tag?> Edit(Tag tag)
         {
             // Fetch the record to be updated
-            var existingTag = await _blogieDbContext.Tags.FirstOrDefaultAsync(q => q.Id == tag.Id);
+            var existingTag = await _bloggieDbContext.Tags.FirstOrDefaultAsync(q => q.Id == tag.Id);
 
             // Check for null and update
             if (existingTag != null)
@@ -73,7 +112,7 @@ namespace Bloggie.Repositories
                 // Or _dbContext.Tags.Update(existingTag);
 
                 // And save to the database
-                await _blogieDbContext.SaveChangesAsync();
+                await _bloggieDbContext.SaveChangesAsync();
 
                 // Back to the controller now
                 return existingTag;
@@ -83,12 +122,12 @@ namespace Bloggie.Repositories
 
         public async Task<Tag?> Delete(Guid Id)
         {
-            var tag = await _blogieDbContext.Tags.FirstOrDefaultAsync(q => q.Id == Id);
+            var tag = await _bloggieDbContext.Tags.FirstOrDefaultAsync(q => q.Id == Id);
 
             if (tag != null)
             {
-                _blogieDbContext.Remove(tag);
-                await _blogieDbContext.SaveChangesAsync();
+                _bloggieDbContext.Remove(tag);
+                await _bloggieDbContext.SaveChangesAsync();
                 return tag;
             }
 

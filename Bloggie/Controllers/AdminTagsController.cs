@@ -26,12 +26,23 @@ namespace Bloggie.Controllers
 
         #region Action Methods
         [HttpGet]
-        public async Task<IActionResult> Index(string? searchQuery)
+        public async Task<IActionResult> Index(
+            string? searchQuery,
+            string? sortBy,
+            string? sortDirection
+            )
         {
-            var domainModel = await _tagRepository.GetAll(searchQuery);
 
-            // Save search state
+            // Save search state after submission a search request
             ViewBag.SearchQuery = searchQuery;
+
+            // Sorting 
+            ViewBag.SortBy = sortBy;
+            ViewBag.SortDirection = sortDirection;
+
+            var domainModel = await _tagRepository
+                .GetAll(searchQuery, sortBy, sortDirection);
+
             // Convert to View Model data
             var viewData = domainModel.Select(q => new ReadOnlyTagRequestVM
             {

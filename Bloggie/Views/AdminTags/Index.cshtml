@@ -6,17 +6,14 @@
     </div>
 </div>
 
-<form 
-      asp-controller="AdminTags"
+<form asp-controller="AdminTags"
       asp-action="Index"
-      
-      method="get"
-      >
+      method="get">
     <div class="container mb-3">
         <div class="row">
             <div class="col col-md-3 d-flex">
                 <!--name="searchQuery" is what filters down the results-->
-                <input class="form-control" type="text" name="searchQuery" placeholder="Search tags..." value="@ViewBag.SearchQuery"/>
+                <input class="form-control" type="text" name="searchQuery" placeholder="Search tags..." value="@ViewBag.SearchQuery" />
                 <button class="btn btn-secondary ms-3">Search</button>
             </div>
         </div>
@@ -32,15 +29,65 @@
                 <tr>
                     @*<th>Id</th>*@
                     <th>
+
                         @Html.DisplayNameFor(item => item.Name)
-                        <span class="btn btn-light">
-                            <span>
-                                <i class="bi bi-arrow-up"></i>
-                            </span>
+
+                        <span>
+                         
+
+                            @if (ViewBag.SortDirection == "Desc")
+                            {
+                                <a asp-controller="AdminTags"
+                                   asp-action="Index"
+                                   asp-route-sortBy="DisplayName"
+                                   asp-route-sortDirection="Asc"
+                                   asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <i class="bi bi-chevron-compact-up text-dark"></i>
+                                </a>
+
+
+                            }
+                            @if (ViewBag.SortDirection == "Asc" || ViewBag.SortDirection is null)
+                            {
+                                <a asp-controller="AdminTags"
+                                   asp-action="Index"
+                                   asp-route-sortBy="DisplayName"
+                                   asp-route-sortDirection="Desc"
+                                   asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <i class="bi bi-chevron-compact-down text-dark"></i>
+                                </a>
+                            }
                         </span>
 
+
                     </th>
-                    <th>@Html.DisplayNameFor(item => item.DisplayName)</th>
+                    <th>
+                        @Html.DisplayNameFor(item => item.DisplayName)
+                        <span>
+                            @if (ViewBag.SortDirection == "Desc")
+                            {
+                                <a asp-controller="AdminTags"
+                                   asp-action="Index"
+                                   asp-route-sortBy="DisplayName"
+                                   asp-route-sortDirection="Asc"
+                                   asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <i class="bi bi-chevron-compact-up text-dark"></i>
+                                </a>
+
+
+                            }
+                            @if (ViewBag.SortDirection == "Asc" || ViewBag.SortDirection is null)
+                            {
+                                <a asp-controller="AdminTags"
+                                   asp-action="Index"
+                                   asp-route-sortBy="DisplayName"
+                                   asp-route-sortDirection="Desc"
+                                   asp-route-searchQuery="@ViewBag.SearchQuery">
+                                    <i class="bi bi-chevron-compact-down text-dark"></i>
+                                </a>
+                            }
+                        </span>
+                    </th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -48,9 +95,9 @@
                 @foreach (var tag in Model)
                 {
                     <tr>
-                        @*<td>@tag.Id</td>*@                        
+                        @*<td>@tag.Id</td>*@
                         <td>@Html.DisplayFor(model => tag.Name)</td>
-                        <td>@Html.DisplayFor(model => tag.DisplayName)</td>                        
+                        <td>@Html.DisplayFor(model => tag.DisplayName)</td>
                         <td>
 
                             <a class="btn btn-warning"
