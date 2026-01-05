@@ -28,12 +28,22 @@ namespace Bloggie.Controllers
         }
         #endregion
         #region Action Methods
-        public async Task<IActionResult> Index()
-
+        public async Task<IActionResult> Index(
+            string? searchQuery,
+            string? sortBy,
+            string? sortDirection
+            )
         // This method displays all users
         {
+            // Save search state after submission a search request
+            ViewBag.SearchQuery = searchQuery;
+
+            // Sorting 
+            ViewBag.SortBy = sortBy;
+            ViewBag.SortDirection = sortDirection;
+
             // Get all users 
-            var model = await _userRepository.GetAllUsersAsync();
+            var model = await _userRepository.GetAllUsersAsync(searchQuery, sortBy, sortDirection);
             var viewModel = new UsersListVM();
 
             if (ModelState.IsValid && model != null)

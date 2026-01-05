@@ -32,9 +32,7 @@
 
                         @Html.DisplayNameFor(item => item.Name)
 
-                        <span>
-                         
-
+                        <span>                         
                             @if (ViewBag.SortDirection == "Desc")
                             {
                                 <a asp-controller="AdminTags"
@@ -43,9 +41,7 @@
                                    asp-route-sortDirection="Asc"
                                    asp-route-searchQuery="@ViewBag.SearchQuery">
                                     <i class="bi bi-chevron-compact-up text-dark"></i>
-                                </a>
-
-
+                                </a>                            
                             }
                             @if (ViewBag.SortDirection == "Asc" || ViewBag.SortDirection is null)
                             {
@@ -58,8 +54,6 @@
                                 </a>
                             }
                         </span>
-
-
                     </th>
                     <th>
                         @Html.DisplayNameFor(item => item.DisplayName)
@@ -73,8 +67,6 @@
                                    asp-route-searchQuery="@ViewBag.SearchQuery">
                                     <i class="bi bi-chevron-compact-up text-dark"></i>
                                 </a>
-
-
                             }
                             @if (ViewBag.SortDirection == "Asc" || ViewBag.SortDirection is null)
                             {

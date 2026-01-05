@@ -19,14 +19,49 @@ namespace Bloggie.Repositories
         #endregion
 
         #region Methods
-        public async Task<IEnumerable<BlogPost>> GetAll()
+        public async Task<IEnumerable<BlogPost>> GetAll(
+            string? searchQuery = null,
+            string? sortBy = null,
+            string? sortDirection = null
+            )
         {
+
+            // Convert BlogPosts to a list we can query
+
+            var query = _bloggieDbContext.BlogPosts.AsQueryable();
+            query = query.OrderBy(q => q.Heading);
+
+            // Search using Heading property
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+            {
+                query = query.Where(q => q.Heading.Contains(searchQuery));
+            }
+
+            // Sort Heading data
+            if (!string.IsNullOrWhiteSpace(sortBy))
+            {
+                var isDecs = string.Equals(sortDirection, "Desc", StringComparison.OrdinalIgnoreCase);
+
+                if (string.Equals(sortBy, "PageTitle", StringComparison.OrdinalIgnoreCase))
+                {
+                    query = isDecs
+                        ?
+                        query.OrderByDescending(q => q.Heading)
+                        :
+                        query.OrderBy(q => q.Heading);
+                }
+            }
+
+            return await query
+               .Include(q => q.Tags)
+               .ToListAsync();
+
             // Using .Include() here to bring from the database a related property (navigation property)
             // from the BlogPost Domain Model
-            var model = await _bloggieDbContext.BlogPosts
-                .Include(q => q.Tags)
-                .ToListAsync();
-            return model;
+            //var model = await _bloggieDbContext.BlogPosts
+            //    .Include(q => q.Tags)
+            //    .ToListAsync();
+            //return model;
         }
 
         public async Task<BlogPost?> Get(Guid id)

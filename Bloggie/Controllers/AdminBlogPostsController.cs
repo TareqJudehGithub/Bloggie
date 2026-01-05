@@ -29,9 +29,20 @@ namespace Bloggie.Controllers
 
         #region Methods
         // Get all tags
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+            string? searchQuery,
+            string? sortBy,
+            string? sortDirection
+            )
         {
-            var model = await _blogPostRepository.GetAll();
+            // Save search state after submission a search request
+            ViewBag.SearchQuery = searchQuery;
+
+            // Sorting 
+            ViewBag.SortBy = sortBy;
+            ViewBag.SortDirection = sortDirection;
+
+            var model = await _blogPostRepository.GetAll(searchQuery, sortBy, sortDirection);
 
             var viewData = model.Select(q => new ReadOnlyBlogPostRequestVM
             {

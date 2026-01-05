@@ -6,7 +6,7 @@ namespace Bloggie.Repositories
     public interface ITagRepository
     {
         public Task<IEnumerable<Tag>> GetAll(
-            string? searchString = null,
+            string? searchQuery = null,
             string? sortBy = null,
             string? sortDirection = null
             );

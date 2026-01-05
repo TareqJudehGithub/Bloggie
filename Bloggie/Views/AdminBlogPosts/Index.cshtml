@@ -1,10 +1,25 @@
 ﻿@model IEnumerable<ReadOnlyBlogPostRequestVM>
 
-<div class="bg-secondary bg-opacity-10 py-2">
+<div class="py-2 mb-5 mt-2">
     <div class="container">
-        <h1>Blog Posts List - Admin Functionality</h1>
+        <h2>Blog Posts List - Admin Functionality</h2>
     </div>
 </div>
+
+<form asp-controller="AdminBlogPosts"
+      asp-action="Index"
+      method="get">
+    <div class="container mb-3">
+        <div class="row">
+            <div class="col col-md-3 d-flex">
+                <!--name="searchQuery" is what filters down the results-->
+                <input class="form-control" type="text" name="searchQuery" placeholder="Search blogs..." value="@ViewBag.SearchQuery" />
+                <button class="btn btn-secondary ms-3">Search</button>
+            </div>
+        </div>
+    </div>
+</form>
+
 <div class="container py-5">
     @{
         if (Model != null && Model.Any())
@@ -13,9 +28,36 @@
             <table class="table">
                 <thead>
                     <tr>
-                        @*<th>@Html.DisplayNameFor(model => model.Id)</th>*@
-                        <th>@Html.DisplayNameFor(model => model.Heading)</th>
-                        <th>@Html.DisplayNameFor(model => model.PageTitle)</th>
+                     
+                            <th>@Html.DisplayNameFor(model => model.PublishedDate)</th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.PageTitle)
+                            <span>
+                                @if (ViewBag.SortDirection == "Desc")
+                                {
+                                    <a 
+                                       asp-controller="AdminBlogPosts"
+                                       asp-action="Index"
+                                       asp-route-sortBy="PageTitle"
+                                       asp-route-sortDirection="Asc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-chevron-compact-up text-dark"></i>
+                                    </a>
+                                }
+                                @if (ViewBag.SortDirection == "Asc" || ViewBag.SortDirection is null)
+                                {
+                                    <a asp-controller="AdminBlogPosts"
+                                       asp-action="Index"
+                                       asp-route-sortBy="PageTitle"
+                                       asp-route-sortDirection="Desc"
+                                       asp-route-searchQuery="@ViewBag.SearchQuery">
+                                        <i class="bi bi-chevron-compact-down text-dark"></i>
+                                    </a>
+                                }
+                            </span>
+                        </th>
+                        @*<th>@Html.DisplayNameFor(model => model.PageTitle)</th>*@
+                            <th>@Html.DisplayNameFor(model => model.Author)</th>
                         <th>@Html.DisplayNameFor(model => model.isVisible)</th>
                         <th>@Html.DisplayNameFor(model => model.Tags)</th>
                         <th>Action</th>
@@ -25,8 +67,6 @@
                             <th>@Html.DisplayNameFor(model => model.ShortDescription)</th>
                             <th>@Html.DisplayNameFor(model => model.FeaturedImgUrl)</th>
                             <th>@Html.DisplayNameFor(model => model.UrlHandle)</th>
-                            <th>@Html.DisplayNameFor(model => model.PublishedDate)</th>
-                            <th>@Html.DisplayNameFor(model => model.Author)</th>
                         *@
                     </tr>
                 </thead>
@@ -34,9 +74,22 @@
                     @foreach (var item in Model)
                     {
                         <tr>
-                            @*<td>@Html.DisplayFor(modelItem => item.Id)</td>*@
-                            <td>@Html.DisplayFor(modelItem => item.Heading)</td>
-                            <td><strong>@Html.DisplayFor(modelItem => item.PageTitle)</strong></td>
+                            <td>@Html.DisplayFor(modelItem => item.PublishedDate)</td>
+                            
+                            <td>
+                            <a 
+                               asp-controller="Blogs"
+                               asp-action="Index"
+                                asp-route-urlHandle="@item.UrlHandle"
+                               class="text-decoration-none text-black"
+                               role="button"
+                               >
+                                <strong>@Html.DisplayFor(modelItem => item.PageTitle)</strong> 
+                            </a>
+                            
+                            </td>
+
+                            <td>@Html.DisplayFor(modelItem => item.Author)</td>
                             <td>@Html.DisplayFor(modelItem => item.isVisible)</td>
                             <td>
 
@@ -73,18 +126,18 @@
         else
         {
             <div class="alert alert-@TempData["AlertType"]" role="alert">
-               @TempData["AlertMessage"]
+                @TempData["AlertMessage"]
             </div>
         }
     }
 </div>
 
 
-                    @*
-                    <td>@Html.DisplayFor(modelItem => item.Content)</td>
-                    <td>@Html.DisplayFor(modelItem => item.ShortDescription)</td>
-                    <td>@Html.DisplayFor(modelItem => item.FeaturedImgUrl)</td>
-                    <td>@Html.DisplayFor(modelItem => item.UrlHandle)</td>
-                    <td>@Html.DisplayFor(modelItem => item.PublishedDate)</td>
-                    <td>@Html.DisplayFor(modlItem => item.Author)</td>
-                        *@
+@*
+    <td>@Html.DisplayFor(modelItem => item.Content)</td>
+    <td>@Html.DisplayFor(modelItem => item.ShortDescription)</td>
+    <td>@Html.DisplayFor(modelItem => item.FeaturedImgUrl)</td>
+    <td>@Html.DisplayFor(modelItem => item.UrlHandle)</td>
+    <td>@Html.DisplayFor(modelItem => item.PublishedDate)</td>
+    <td>@Html.DisplayFor(modlItem => item.Author)</td>
+*@

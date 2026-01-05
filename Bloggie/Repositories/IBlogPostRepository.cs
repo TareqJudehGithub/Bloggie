@@ -5,7 +5,11 @@ namespace Bloggie.Repositories
 {
     public interface IBlogPostRepository
     {
-        public Task<IEnumerable<BlogPost>> GetAll();
+        public Task<IEnumerable<BlogPost>> GetAll(
+             string? searchString = null,
+            string? sortBy = null,
+            string? sortDirection = null
+            );
         Task<BlogPost?> Get(Guid id);
         Task<BlogPost?> Add(BlogPost blogPost);
         Task<BlogPost?> Update(BlogPost blogPost);

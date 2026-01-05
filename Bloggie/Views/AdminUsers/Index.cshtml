@@ -8,19 +8,64 @@
 
 <div class="container">
 
-    <div class="mb-3 d-flex justify-content-end">
+    <div class="mb-3 d-flex justify-content-between">
+
+        <form asp-controller="AdminUsers"
+              asp-action="Index"
+              method="get">
+            <div class="container mb-3">
+                <div class="row">
+                    <div class="col col-md-12 d-flex justify-content-start">
+                        <!--name="searchQuery" is what filters down the results-->
+                        <input class="form-control" type="text" name="searchQuery" placeholder="Search tags..." value="@ViewBag.SearchQuery" />
+                        <button class="btn btn-secondary ms-3">Search</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCreateUser">
             New user
         </button>
+
     </div>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id </th>
-                <th>Username</th>
+                @*<th>Id </th>*@
+                <th>
+                    Username
+                    <!--Add sorting logic and icons here: -->
+                    <span>
+                        @if (ViewBag.SortDirection == "Desc")
+                        {
+                            <a asp-controller="AdminUsers"
+                               asp-action="Index"
+                               asp-route-sortBy="Username"
+                               asp-route-sortDirection="Asc"
+                               asp-route-searchQuery="@ViewBag.SearchQuery">
+                                <i class="bi bi-chevron-compact-up text-dark"></i>
+                            </a>
+                        }
+                        @if (ViewBag.SortDirection == "Asc" || ViewBag.SortDirection is null)
+                        {
+                            <a asp-controller="AdminUsers"
+                               asp-action="Index"
+                               asp-route-sortBy="Username"
+                               asp-route-sortDirection="Desc"
+                               asp-route-searchQuery="@ViewBag.SearchQuery">
+                                <i class="bi bi-chevron-compact-down text-dark"></i>
+                            </a>
+                        }
+                    </span>
+
+                   
+                </th>
                 <th>Email</th>
+                <!--Add sorting logic and icons here: -->
+
                 <th>Action</th>
             </tr>
         </thead>
@@ -29,7 +74,7 @@
             @foreach (var item in @Model.Users)
             {
                 <tr>
-                    <td>@Html.DisplayFor(viewModel => item.Id)</td>
+                    @*<td>@Html.DisplayFor(viewModel => item.Id)</td>*@
                     <td>@Html.DisplayFor(viewModel => item.Username)</td>
                     <td>@Html.DisplayFor(viewModel => item.Email)</td>
 

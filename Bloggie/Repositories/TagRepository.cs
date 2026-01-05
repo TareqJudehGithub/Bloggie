@@ -28,17 +28,21 @@ namespace Bloggie.Repositories
             )
         {
             // Turn Tags to a list of items that we can query - Search
-            var query = _bloggieDbContext.Tags.AsQueryable();
+            var query = _bloggieDbContext.Tags
+                .OrderBy(q => q.Name)
+                .AsQueryable();
 
-            query = query.OrderBy(q => q.Name);
+            // query = query.OrderBy(q => q.Name);
 
             // Filtering
             // Use input value in searchQuery 
             if (!string.IsNullOrWhiteSpace(searchQuery))
             {
                 // If the search input value matches any of Name of DisplayName, then return that  result back.
-                query = query.Where(q => q.Name.Contains(searchQuery) ||
-                q.DisplayName.Contains(searchQuery)
+                query = query
+                    .Where(
+                    q => q.Name.Contains(searchQuery) ||
+                    q.DisplayName.Contains(searchQuery)
                 );
             }
 
