@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Bloggie.Models.Domain;
 using Bloggie.Models.ViewModel;
 using Bloggie.Repositories;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Bloggie.Controllers
 {
@@ -29,9 +28,30 @@ namespace Bloggie.Controllers
         public async Task<IActionResult> Index(
             string? searchQuery,
             string? sortBy,
-            string? sortDirection
+            string? sortDirection,
+            int pageSize = 3, // Total of results return per page
+            int pageNumber = 1
             )
         {
+            // Total number or records in Tags entity/table
+            var totalRecords = await _tagRepository.CountAsync();
+            // Example: total records = 10 / 5 = 2 pages
+            var totalPages = Math.Ceiling(Convert.ToDecimal(totalRecords) / pageSize);
+
+            // Prevent user from using Previous/Next buttons if  at the 1st and the last page
+            //if (pageNumber > totalPages)
+            //{
+            //    pageNumber--;
+            //}
+            //if (pageNumber < 1)
+            //{
+            //    pageNumber++;
+            //}
+
+            // Pagination
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageNumber = pageNumber;
+            ViewBag.PageSize = pageSize;
 
             // Save search state after submission a search request
             ViewBag.SearchQuery = searchQuery;
@@ -41,7 +61,11 @@ namespace Bloggie.Controllers
             ViewBag.SortDirection = sortDirection;
 
             var domainModel = await _tagRepository
-                .GetAll(searchQuery, sortBy, sortDirection);
+                .GetAll(
+                searchQuery, sortBy, sortDirection,
+                pageSize,
+                pageNumber
+                );
 
             // Convert to View Model data
             var viewData = domainModel.Select(q => new ReadOnlyTagRequestVM

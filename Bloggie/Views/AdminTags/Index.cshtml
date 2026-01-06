@@ -1,5 +1,12 @@
 ﻿@model IEnumerable<ReadOnlyTagRequestVM>
 
+@{
+    // Pagination: Previous/Next buttons
+    int prevPage = Convert.ToInt32(ViewBag.PageNumber - 1);
+    int nextPage = Convert.ToInt32(ViewBag.PageNumber + 1);
+}
+
+
 <div class="py-2 mb-5 mt-2">
     <div class="container">
         <h2>Show all Tags - Admin Functionality</h2>
@@ -20,7 +27,6 @@
     </div>
 </form>
 
-
 <div class="container">
     @if (Model != null && Model.Any())
     {
@@ -31,8 +37,8 @@
                     <th>
 
                         @Html.DisplayNameFor(item => item.Name)
-
-                        <span>                         
+                        @ViewBag.PageNumber
+                        <span>
                             @if (ViewBag.SortDirection == "Desc")
                             {
                                 <a asp-controller="AdminTags"
@@ -41,7 +47,7 @@
                                    asp-route-sortDirection="Asc"
                                    asp-route-searchQuery="@ViewBag.SearchQuery">
                                     <i class="bi bi-chevron-compact-up text-dark"></i>
-                                </a>                            
+                                </a>
                             }
                             @if (ViewBag.SortDirection == "Asc" || ViewBag.SortDirection is null)
                             {
@@ -57,6 +63,7 @@
                     </th>
                     <th>
                         @Html.DisplayNameFor(item => item.DisplayName)
+                        @ViewBag.TotalPages
                         <span>
                             @if (ViewBag.SortDirection == "Desc")
                             {
@@ -90,8 +97,7 @@
                         @*<td>@tag.Id</td>*@
                         <td>@Html.DisplayFor(model => tag.Name)</td>
                         <td>@Html.DisplayFor(model => tag.DisplayName)</td>
-                        <td>
-
+                        <td>                           
                             <a class="btn btn-warning"
                                asp-controller="adminTags"
                                asp-action="Edit"
@@ -107,6 +113,78 @@
                 }
             </tbody>
         </table>
+
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+
+                @if (ViewBag.PageNumber == 1)
+                {
+                    <li class="page-item">
+                        <button hidden
+                                class="page-link bg-secondary bg-opacity-25">
+                            Previous
+                        </button>
+                    </li>
+                }
+                else
+                {
+                    <li class="page-item">
+                        <a asp-controller="AdminTags"
+                           asp-action="Index"
+                           asp-route-pageNumber="@prevPage"
+                           asp-route-pageSize="@ViewBag.PageSize"
+                           class="page-link">Previous</a>
+                    </li>
+                }
+                @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                {
+
+                    @if (i == ViewBag.PageNumber)
+                    {
+                        <li class="page-item">
+                            <a asp-controller="AdminTags"
+                               asp-action="Index"
+                               asp-route-pageNumber="@i"
+                               asp-route-pageSize="@ViewBag.PageSize"
+                               class="page-link bg-secondary bg-opacity-25">
+                                <span class="">@i</span>
+                            </a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item ">
+                            <a asp-controller="AdminTags"
+                               asp-action="Index"
+                               asp-route-pageNumber="@i"
+                               class="page-link">
+                                @i
+                            </a>
+                        </li>
+                    }
+                }
+                @if (ViewBag.PageNumber == ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <button hidden
+                                class="page-link bg-secondary bg-opacity-25">
+                            Next
+                        </button>
+                    </li>
+                }
+                else
+                {
+                <li class="page-item">
+                    <a asp-controller="AdminTags"
+                       asp-action="Index"
+                       asp-route-pageNumber="@nextPage"
+                       asp-route-pageSize="@ViewBag.PageSize"
+                       class="page-link">Next</a>
+                </li>
+                }
+            </ul>
+        </nav>
     }
     else
     {

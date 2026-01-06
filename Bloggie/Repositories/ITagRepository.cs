@@ -5,14 +5,19 @@ namespace Bloggie.Repositories
 {
     public interface ITagRepository
     {
-        public Task<IEnumerable<Tag>> GetAll(
-            string? searchQuery = null,
-            string? sortBy = null,
-            string? sortDirection = null
-            );
-        public Task<Tag?> Get(Guid Id);
-        public Task<Tag> Add(Tag model);
-        public Task<Tag?> Edit(Tag model);
-        public Task<Tag?> Delete(Guid Id);
+        Task<IEnumerable<Tag>> GetAll(
+           string? searchQuery = null,
+           string? sortBy = null,
+           string? sortDirection = null,
+           int pageSize = 100,
+           int pageNumber = 1
+           );
+        Task<Tag?> Get(Guid Id);
+        Task<Tag> Add(Tag model);
+        Task<Tag?> Edit(Tag model);
+        Task<Tag?> Delete(Guid Id);
+
+        // Pagination
+        Task<int> CountAsync();
     }
 }

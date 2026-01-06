@@ -24,7 +24,9 @@ namespace Bloggie.Repositories
         public async Task<IEnumerable<Tag>> GetAll(
             string? searchQuery,
             string? sortBy,
-            string sortDirection
+            string sortDirection,
+            int pageSize = 3,
+            int pageNumber = 1
             )
         {
             // Turn Tags to a list of items that we can query - Search
@@ -80,9 +82,12 @@ namespace Bloggie.Repositories
             }
 
             // Pagination
+            // Skip 0 Take 5 => Page 1 of 5 results
+            // Skip 5 Take next 5 => Page 2 of 5 results
+            var skipResults = (pageNumber - 1) * pageSize;
+            query = query.Skip(skipResults).Take(pageSize);
 
             return await query.ToListAsync();
-
 
             // Code before implementing Search and Sort
             // var domainModel = await _blogieDbContext.Tags.ToListAsync();
@@ -137,10 +142,17 @@ namespace Bloggie.Repositories
 
             return null;
         }
+
+        public async Task<int> CountAsync()
+        {
+            // Return the number of elements inside Tags table
+            return await _bloggieDbContext.Tags.CountAsync();
+        }
         #endregion
+
+
     }
 }
-
 
 /* 
  *  public Task<IEnumerable<Tag>> GetAllAsync();
